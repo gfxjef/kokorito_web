@@ -1,0 +1,288 @@
+{
+  "project": "Kokorito v2.0 - Web de Tortas Estilo MercadoLibre",
+  "version": "2.0.0",
+  "description": "Rediseño completo inspirado en MercadoLibre para venta de tortas y productos de pastelería",
+  "tasks": [
+    {
+      "id": "REDESIGN-001",
+      "title": "Actualizar configuración y colores",
+      "description": "Actualizar Tailwind con nueva paleta de colores y configuración",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": "15 mins",
+      "subtasks": [
+        {
+          "id": "REDESIGN-001-1",
+          "title": "Actualizar tailwind.config.js con nuevos colores",
+          "status": "pending"
+        },
+        {
+          "id": "REDESIGN-001-2",
+          "title": "Actualizar globals.css",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "HEADER-001",
+      "title": "Rediseñar Header estilo MercadoLibre",
+      "description": "Crear header limpio con búsqueda prominente y navegación horizontal",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": "45 mins",
+      "subtasks": [
+        {
+          "id": "HEADER-001-1",
+          "title": "Reestructurar componente Header",
+          "status": "pending"
+        },
+        {
+          "id": "HEADER-001-2",
+          "title": "Implementar barra de búsqueda prominente",
+          "status": "pending"
+        },
+        {
+          "id": "HEADER-001-3",
+          "title": "Agregar navegación horizontal limpia",
+          "status": "pending"
+        },
+        {
+          "id": "HEADER-001-4",
+          "title": "Implementar carrito de compras",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "BANNER-001",
+      "title": "Crear Banner Promocional Hero",
+      "description": "Banner full-width con promociones de tortas personalizadas",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": "30 mins",
+      "subtasks": [
+        {
+          "id": "BANNER-001-1",
+          "title": "Diseñar banner promocional principal",
+          "status": "pending"
+        },
+        {
+          "id": "BANNER-001-2",
+          "title": "Implementar llamadas a la acción",
+          "status": "pending"
+        },
+        {
+          "id": "BANNER-001-3",
+          "title": "Agregar responsividad al banner",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "SECTION-001",
+      "title": "Crear sección Más Vendidos",
+      "description": "Sección horizontal con productos más populares",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_time": "35 mins",
+      "subtasks": [
+        {
+          "id": "SECTION-001-1",
+          "title": "Componente BestSellers",
+          "status": "pending"
+        },
+        {
+          "id": "SECTION-001-2",
+          "title": "Cards de productos horizontales",
+          "status": "pending"
+        },
+        {
+          "id": "SECTION-001-3",
+          "title": "Navegación lateral (flechas)",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "SECTION-002",
+      "title": "Crear sección Categorías Principales",
+      "description": "Grid de categorías con imágenes atractivas",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_time": "40 mins",
+      "subtasks": [
+        {
+          "id": "SECTION-002-1",
+          "title": "Componente CategoriesGrid",
+          "status": "pending"
+        },
+        {
+          "id": "SECTION-002-2",
+          "title": "Cards de categorías con hover effects",
+          "status": "pending"
+        },
+        {
+          "id": "SECTION-002-3",
+          "title": "Responsive grid layout",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "SECTION-003",
+      "title": "Crear sección Ofertas del Día",
+      "description": "Banner de ofertas + grid de productos en descuento",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_time": "45 mins",
+      "subtasks": [
+        {
+          "id": "SECTION-003-1",
+          "title": "Componente DailyOffers",
+          "status": "pending"
+        },
+        {
+          "id": "SECTION-003-2",
+          "title": "Cards con precios tachados y descuentos",
+          "status": "pending"
+        },
+        {
+          "id": "SECTION-003-3",
+          "title": "Contador de tiempo para ofertas",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "SECTION-004",
+      "title": "Crear sección Tortas Personalizadas",
+      "description": "Banner especial para tortas personalizadas con CTA",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": "35 mins",
+      "subtasks": [
+        {
+          "id": "SECTION-004-1",
+          "title": "Componente CustomCakes",
+          "status": "pending"
+        },
+        {
+          "id": "SECTION-004-2",
+          "title": "Formulario de contacto rápido",
+          "status": "pending"
+        },
+        {
+          "id": "SECTION-004-3",
+          "title": "Galería de ejemplos",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "FOOTER-001",
+      "title": "Crear Footer estilo e-commerce",
+      "description": "Footer completo con enlaces, información y garantías",
+      "status": "pending",
+      "priority": "low",
+      "estimated_time": "25 mins",
+      "subtasks": [
+        {
+          "id": "FOOTER-001-1",
+          "title": "Estructura del footer",
+          "status": "pending"
+        },
+        {
+          "id": "FOOTER-001-2",
+          "title": "Enlaces de ayuda y políticas",
+          "status": "pending"
+        },
+        {
+          "id": "FOOTER-001-3",
+          "title": "Información de contacto y redes",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "DATA-002",
+      "title": "Actualizar datos estáticos v2.0",
+      "description": "Datos más completos para la nueva estructura",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_time": "20 mins",
+      "subtasks": [
+        {
+          "id": "DATA-002-1",
+          "title": "Productos con ofertas y descuentos",
+          "status": "pending"
+        },
+        {
+          "id": "DATA-002-2",
+          "title": "Categorías con imágenes",
+          "status": "pending"
+        },
+        {
+          "id": "DATA-002-3",
+          "title": "Banners promocionales",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "LAYOUT-002",
+      "title": "Integrar nuevo layout principal",
+      "description": "Componer todos los componentes sin sidebars",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": "30 mins",
+      "subtasks": [
+        {
+          "id": "LAYOUT-002-1",
+          "title": "Reestructurar page.tsx principal",
+          "status": "pending"
+        },
+        {
+          "id": "LAYOUT-002-2",
+          "title": "Eliminar sidebars laterales",
+          "status": "pending"
+        },
+        {
+          "id": "LAYOUT-002-3",
+          "title": "Implementar layout full-width",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "RESPONSIVE-001",
+      "title": "Optimizar responsive design v2.0",
+      "description": "Asegurar que funcione perfectamente en todos los dispositivos",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": "40 mins",
+      "subtasks": [
+        {
+          "id": "RESPONSIVE-001-1",
+          "title": "Mobile-first approach",
+          "status": "pending"
+        },
+        {
+          "id": "RESPONSIVE-001-2",
+          "title": "Tablet optimization",
+          "status": "pending"
+        },
+        {
+          "id": "RESPONSIVE-001-3",
+          "title": "Desktop refinement",
+          "status": "pending"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_tasks": 11,
+    "completed": 6,
+    "pending": 5,
+    "estimated_total_time": "6 hours 30 mins"
+  }
+} 

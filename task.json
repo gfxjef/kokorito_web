@@ -1,0 +1,292 @@
+{
+  "project": "Kokorito - Web de Tortas y Keks",
+  "version": "1.0.0",
+  "tasks": [
+    {
+      "id": "SETUP-001",
+      "title": "Configuración inicial del proyecto",
+      "description": "Crear estructura del proyecto Next.js y configurar dependencias",
+      "status": "completed",
+      "priority": "high",
+      "estimated_time": "30 mins",
+      "subtasks": [
+        {
+          "id": "SETUP-001-1",
+          "title": "Crear proyecto Next.js",
+          "status": "completed"
+        },
+        {
+          "id": "SETUP-001-2", 
+          "title": "Instalar y configurar Tailwind CSS",
+          "status": "completed"
+        },
+        {
+          "id": "SETUP-001-3",
+          "title": "Configurar estructura de carpetas",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": "DATA-001",
+      "title": "Crear datos estáticos",
+      "description": "Implementar datos de productos, categorías e imágenes estáticas",
+      "status": "completed",
+      "priority": "medium",
+      "estimated_time": "20 mins",
+      "subtasks": [
+        {
+          "id": "DATA-001-1",
+          "title": "Crear types/interfaces TypeScript",
+          "status": "completed"
+        },
+        {
+          "id": "DATA-001-2",
+          "title": "Implementar datos de productos",
+          "status": "completed"
+        },
+        {
+          "id": "DATA-001-3",
+          "title": "Crear datos de categorías",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": "COMP-001",
+      "title": "Desarrollar componente Header",
+      "description": "Crear header con logo, búsqueda, info contacto y usuario",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": "45 mins",
+      "subtasks": [
+        {
+          "id": "COMP-001-1",
+          "title": "Estructura básica del header",
+          "status": "pending"
+        },
+        {
+          "id": "COMP-001-2",
+          "title": "Implementar logo y navegación",
+          "status": "pending"
+        },
+        {
+          "id": "COMP-001-3",
+          "title": "Agregar barra de búsqueda",
+          "status": "pending"
+        },
+        {
+          "id": "COMP-001-4",
+          "title": "Styling con Tailwind CSS",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "COMP-002",
+      "title": "Desarrollar componente Sidebar",
+      "description": "Crear menú lateral con categorías y filtros",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": "30 mins",
+      "subtasks": [
+        {
+          "id": "COMP-002-1",
+          "title": "Estructura del sidebar",
+          "status": "pending"
+        },
+        {
+          "id": "COMP-002-2",
+          "title": "Implementar menú vertical",
+          "status": "pending"
+        },
+        {
+          "id": "COMP-002-3",
+          "title": "Styling y colores",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "COMP-003",
+      "title": "Desarrollar componente Hero",
+      "description": "Crear sección hero con imagen principal y contenido destacado",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_time": "25 mins",
+      "subtasks": [
+        {
+          "id": "COMP-003-1",
+          "title": "Estructura del hero",
+          "status": "pending"
+        },
+        {
+          "id": "COMP-003-2",
+          "title": "Implementar imagen y texto",
+          "status": "pending"
+        },
+        {
+          "id": "COMP-003-3",
+          "title": "Botón de acción",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "COMP-004",
+      "title": "Desarrollar componente TopProducts",
+      "description": "Crear sección de productos destacados lateral",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_time": "35 mins",
+      "subtasks": [
+        {
+          "id": "COMP-004-1",
+          "title": "Estructura de productos top",
+          "status": "pending"
+        },
+        {
+          "id": "COMP-004-2",
+          "title": "Cards de productos",
+          "status": "pending"
+        },
+        {
+          "id": "COMP-004-3",
+          "title": "Implementar imágenes externas",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "COMP-005",
+      "title": "Desarrollar componente FeaturedImages",
+      "description": "Crear grid de 3 imágenes destacadas grandes",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_time": "20 mins",
+      "subtasks": [
+        {
+          "id": "COMP-005-1",
+          "title": "Grid de imágenes",
+          "status": "pending"
+        },
+        {
+          "id": "COMP-005-2",
+          "title": "Responsive design",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "COMP-006",
+      "title": "Desarrollar componente ProductGrid",
+      "description": "Crear grid de productos con información completa",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": "40 mins",
+      "subtasks": [
+        {
+          "id": "COMP-006-1",
+          "title": "Estructura del grid",
+          "status": "pending"
+        },
+        {
+          "id": "COMP-006-2",
+          "title": "Cards individuales de productos",
+          "status": "pending"
+        },
+        {
+          "id": "COMP-006-3",
+          "title": "Información: título, categoría, precio",
+          "status": "pending"
+        },
+        {
+          "id": "COMP-006-4",
+          "title": "Responsive grid",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "LAYOUT-001",
+      "title": "Integrar componentes en página principal",
+      "description": "Componer todos los componentes en el layout principal",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": "30 mins",
+      "subtasks": [
+        {
+          "id": "LAYOUT-001-1",
+          "title": "Estructura del layout principal",
+          "status": "pending"
+        },
+        {
+          "id": "LAYOUT-001-2",
+          "title": "Integrar Header y Sidebar",
+          "status": "pending"
+        },
+        {
+          "id": "LAYOUT-001-3",
+          "title": "Integrar área de contenido",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "STYLE-001",
+      "title": "Implementar diseño responsive",
+      "description": "Asegurar que la web funcione en todos los dispositivos",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": "45 mins",
+      "subtasks": [
+        {
+          "id": "STYLE-001-1",
+          "title": "Responsive para desktop",
+          "status": "pending"
+        },
+        {
+          "id": "STYLE-001-2",
+          "title": "Responsive para tablet",
+          "status": "pending"
+        },
+        {
+          "id": "STYLE-001-3",
+          "title": "Responsive para mobile",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "TEST-001",
+      "title": "Testing y optimización",
+      "description": "Probar funcionamiento y optimizar rendimiento",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_time": "30 mins",
+      "subtasks": [
+        {
+          "id": "TEST-001-1",
+          "title": "Pruebas de navegación",
+          "status": "pending"
+        },
+        {
+          "id": "TEST-001-2",
+          "title": "Verificar carga de imágenes",
+          "status": "pending"
+        },
+        {
+          "id": "TEST-001-3",
+          "title": "Optimización de rendimiento",
+          "status": "pending"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_tasks": 11,
+    "completed": 8,
+    "pending": 3,
+    "estimated_total_time": "5 hours 30 mins"
+  }
+} 
