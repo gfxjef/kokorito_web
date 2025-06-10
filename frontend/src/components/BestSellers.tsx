@@ -1,8 +1,9 @@
 'use client';
-import { products } from '@/data/staticData';
+import { useBestSellers } from '@/hooks/useApiData';
+import ProductImageHover from '@/components/shared/ProductImageHover';
 
 export default function BestSellers() {
-  const bestSellers = products.slice(0, 6);
+  const { data: bestSellers, loading, error } = useBestSellers();
 
   return (
     <section className="py-12 bg-white">
@@ -17,58 +18,91 @@ export default function BestSellers() {
           </a>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
-          {bestSellers.map((product) => (
-            <div key={product.id} className="bg-white border border-gray-200 rounded-lg hover:shadow-lg transition-shadow duration-300 overflow-hidden group">
-              <div className="relative">
-                <div 
-                  className="h-48 bg-cover bg-center group-hover:scale-105 transition-transform duration-300"
-                  style={{
-                    backgroundImage: `url(${product.image})`
-                  }}
-                >
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          {loading ? (
+            // Estado de carga
+            Array(5).fill(0).map((_, index) => (
+              <div key={index} className="bg-white border border-gray-200 rounded-lg overflow-hidden animate-pulse">
+                <div className="h-48 bg-gray-300"></div>
+                <div className="p-4">
+                  <div className="h-4 bg-gray-300 rounded mb-2"></div>
+                  <div className="h-3 bg-gray-300 rounded mb-3 w-1/2"></div>
+                  <div className="h-4 bg-gray-300 rounded w-1/3"></div>
                 </div>
-                <div className="absolute top-2 left-2 bg-primary text-white text-xs px-2 py-1 rounded-full font-semibold">
-                  #1 Vendido
-                </div>
-                <button className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-primary hover:text-white transition-colors">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                  </svg>
-                </button>
               </div>
-              
-              <div className="p-4">
-                <h3 className="font-semibold text-text text-sm leading-tight mb-1">
-                  {product.title}
-                </h3>
-                <p className="text-gray-500 text-xs mb-3">
-                  {product.category}
-                </p>
-                
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-primary font-bold text-lg">
-                      S/. {product.price.toFixed(2)}
-                    </span>
-                    <div className="flex items-center mt-1">
-                      <div className="flex text-yellow-400 text-xs">
-                        {'★'.repeat(5)}
-                      </div>
-                      <span className="text-gray-500 text-xs ml-1">(124)</span>
-                    </div>
+            ))
+          ) : bestSellers.length > 0 ? (
+            bestSellers.map((product, index) => (
+              <div key={product.id} className="bg-white border border-gray-200 rounded-lg hover:shadow-lg transition-shadow duration-300 overflow-hidden group">
+                <div className="relative">
+                  <ProductImageHover product={product} className="h-48" />
+                  <div className="absolute top-2 left-2 bg-primary text-white text-xs px-2 py-1 rounded-full font-semibold">
+                    #{index + 1} Vendido
                   </div>
-                  <button className="bg-accent text-white px-3 py-1 rounded text-xs font-semibold hover:bg-teal-600 transition-colors">
-                    Agregar
+                  {product.discount && (
+                    <div className="absolute top-2 right-10 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                      {product.discount} OFF
+                    </div>
+                  )}
+                  <button className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-primary hover:text-white transition-colors">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                    </svg>
                   </button>
                 </div>
                 
-                <div className="mt-2 text-xs text-accent font-semibold">
-                  🚚 Envío gratis
+                <div className="p-4">
+                  <h3 className="font-semibold text-text text-sm leading-tight mb-1">
+                    {product.title || product.name}
+                  </h3>
+                  <p className="text-gray-500 text-xs mb-3">
+                    {product.category}
+                  </p>
+                  
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-primary font-bold text-lg">
+                          S/. {(Number(product.price) || 0).toFixed(2)}
+                        </span>
+                        {product.originalPrice && (
+                          <span className="text-gray-400 text-sm line-through">
+                            S/. {(Number(product.originalPrice) || 0).toFixed(2)}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center mt-1">
+                        <div className="flex text-yellow-400 text-xs">
+                          {'★'.repeat(Math.min(5, Math.round(product.rating || 0)))}
+                          {'☆'.repeat(Math.max(0, 5 - Math.round(product.rating || 0)))}
+                        </div>
+                        <span className="text-gray-500 text-xs ml-1">({product.reviews || 0})</span>
+                      </div>
+                    </div>
+                    <button 
+                      className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
+                        product.inStock 
+                          ? 'bg-accent text-white hover:bg-teal-600' 
+                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      }`}
+                      disabled={!product.inStock}
+                    >
+                      {product.inStock ? 'Agregar' : 'Agotado'}
+                    </button>
+                  </div>
+                  
+                  <div className="mt-2 text-xs text-accent font-semibold">
+                    🚚 Envío gratis
+                  </div>
                 </div>
               </div>
+            ))
+          ) : (
+            // Estado cuando no hay productos
+            <div className="col-span-full text-center py-8">
+              <p className="text-gray-500">No hay productos disponibles en este momento</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </section>

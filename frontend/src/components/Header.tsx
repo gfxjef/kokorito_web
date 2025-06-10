@@ -1,7 +1,132 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { categoriaService, transformers } from '@/services/api';
 
-const categories = [
+// Iconos predefinidos para categorías
+const categoryIcons = {
+  1: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+      <circle cx="12" cy="12" r="10" className="fill-primary/20 stroke-primary"/>
+      <path d="M8 12h8M10 8h4M10 16h4" className="stroke-primary" strokeWidth={2}/>
+    </svg>
+  ),
+  2: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} className="fill-primary/20 stroke-primary" d="M8 20h8a2 2 0 002-2V10a2 2 0 00-2-2H8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} className="stroke-primary" d="M7 10V6a5 5 0 0110 0v4"/>
+      <circle cx="12" cy="6" r="1" className="fill-primary"/>
+    </svg>
+  ),
+  3: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <rect x="4" y="8" width="16" height="12" rx="2" className="fill-primary/20 stroke-primary" strokeWidth={1.5}/>
+      <path d="M8 8V6a4 4 0 118 0v2" className="stroke-primary" strokeWidth={2}/>
+      <circle cx="10" cy="14" r="1" className="fill-primary"/>
+      <circle cx="14" cy="14" r="1" className="fill-primary"/>
+    </svg>
+  ),
+  4: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} className="fill-primary/20 stroke-primary" d="M6 18h12a2 2 0 002-2V8a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} className="stroke-primary" d="M8 12h8M12 8v8"/>
+    </svg>
+  )
+};
+
+// Subcategorías por defecto basadas en el tipo de categoría
+const defaultSubcategories = {
+  1: { // Tortas
+    "Ocasiones Especiales": {
+      image: "https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=400&h=300&fit=crop",
+      items: [
+        { name: "Cumpleaños", image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop" },
+        { name: "Boda", image: "https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=400&h=300&fit=crop" },
+        { name: "Aniversarios", image: "https://images.unsplash.com/photo-1571115764595-644a1f56a55c?w=400&h=300&fit=crop" },
+        { name: "Graduaciones", image: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400&h=300&fit=crop" }
+      ]
+    },
+    "Por Sabor": {
+      image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=300&fit=crop",
+      items: [
+        { name: "Red Velvet", image: "https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=400&h=300&fit=crop" },
+        { name: "Chocolate", image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=300&fit=crop" },
+        { name: "Vainilla", image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=300&fit=crop" },
+        { name: "Tres Leches", image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=300&fit=crop" }
+      ]
+    }
+  },
+  2: { // Cupcakes
+    "Gourmet": {
+      image: "https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=400&h=300&fit=crop",
+      items: [
+        { name: "Red Velvet", image: "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=400&h=300&fit=crop" },
+        { name: "Lemon", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop" },
+        { name: "Oreo", image: "https://images.unsplash.com/photo-1514517220017-8ce97a34a7b6?w=400&h=300&fit=crop" },
+        { name: "Ferrero", image: "https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=400&h=300&fit=crop" }
+      ]
+    },
+    "Clásicos": {
+      image: "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=400&h=300&fit=crop",
+      items: [
+        { name: "Chocolate", image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=300&fit=crop" },
+        { name: "Vainilla", image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=300&fit=crop" },
+        { name: "Fresa", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop" },
+        { name: "Zanahoria", image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=300&fit=crop" }
+      ]
+    }
+  },
+  3: { // Keks
+    "Tradicionales": {
+      image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=300&fit=crop",
+      items: [
+        { name: "Kek de Chocolate", image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=300&fit=crop" },
+        { name: "Kek de Vainilla", image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=300&fit=crop" },
+        { name: "Kek Marmoleado", image: "https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=400&h=300&fit=crop" },
+        { name: "Kek de Limón", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop" }
+      ]
+    },
+    "Rellenos": {
+      image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=300&fit=crop",
+      items: [
+        { name: "Manjar Blanco", image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=300&fit=crop" },
+        { name: "Crema Pastelera", image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=300&fit=crop" },
+        { name: "Frutas", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop" },
+        { name: "Chocolate", image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=300&fit=crop" }
+      ]
+    }
+  },
+  4: { // Postres
+    "Fríos": {
+      image: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=400&h=300&fit=crop",
+      items: [
+        { name: "Cheesecakes", image: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=400&h=300&fit=crop" },
+        { name: "Tiramisú", image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=300&fit=crop" },
+        { name: "Panna Cotta", image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=300&fit=crop" },
+        { name: "Mousse", image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=300&fit=crop" }
+      ]
+    },
+    "Tradicionales": {
+      image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=300&fit=crop",
+      items: [
+        { name: "Tres Leches", image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=300&fit=crop" },
+        { name: "Suspiro Limeño", image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=300&fit=crop" },
+        { name: "Mazamorra", image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=300&fit=crop" },
+        { name: "Arroz con Leche", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=300&fit=crop" }
+      ]
+    }
+  }
+};
+
+interface CategoryData {
+  id: number;
+  name: string;
+  icon: any;
+  image: string;
+  subcategories: any;
+}
+
+const staticCategories = [
   {
     id: 1,
     name: "Tortas",
@@ -221,6 +346,32 @@ export default function Header() {
   const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
   const [currentImage, setCurrentImage] = useState<string>("");
   const [activeSubcategory, setActiveSubcategory] = useState<string>("");
+  const [categories, setCategories] = useState<CategoryData[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categoriasDB = await categoriaService.getAll();
+        
+        // Tomar solo las primeras 4 categorías y transformarlas
+        const categoriesData = categoriasDB.slice(0, 4).map((categoria) => ({
+          id: categoria.id,
+          name: categoria.nombre,
+          icon: categoryIcons[categoria.id as keyof typeof categoryIcons] || categoryIcons[1],
+          image: categoria.imagen_url || `https://images.unsplash.com/photo-${Math.random().toString(36).substr(2, 9)}?w=400&h=300&fit=crop`,
+          subcategories: defaultSubcategories[categoria.id as keyof typeof defaultSubcategories] || defaultSubcategories[1]
+        }));
+        
+        setCategories(categoriesData);
+      } catch (error) {
+        console.error('Error cargando categorías:', error);
+        // Usar categorías por defecto en caso de error
+        setCategories(staticCategories.slice(0, 4));
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   return (
     <header className="bg-warning shadow-sm">
@@ -354,7 +505,7 @@ export default function Header() {
                         
                         return (
                           <div className="grid grid-cols-1 gap-6">
-                            {Object.entries(currentCategory.subcategories).map(([groupName, subcategory]) => (
+                            {Object.entries(currentCategory.subcategories).map(([groupName, subcategory]: [string, any]) => (
                               <div key={groupName}>
                                 <h4 
                                   className="font-bold text-primary mb-3 text-sm uppercase tracking-wide cursor-pointer hover:text-pink-600 transition-colors"

@@ -1,5 +1,6 @@
 'use client';
 import { products } from '@/data/staticData';
+import ProductImageHover from '@/components/shared/ProductImageHover';
 
 export default function ProductGrid() {
   return (
@@ -9,13 +10,15 @@ export default function ProductGrid() {
           {products.map((product) => (
             <div key={product.id} className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
               <div className="relative h-48">
-                <div 
-                  className="w-full h-full bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url(${product.image})`
+                <ProductImageHover 
+                  product={{
+                    image: product.image,
+                    name: product.title,
+                    // Los productos estáticos no tienen secondImage por defecto
                   }}
-                >
-                </div>
+                  className="w-full h-full"
+                  showIndicator={false}
+                />
                 <div className="absolute top-2 right-2">
                   <button className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-primary hover:text-white transition-colors duration-200">
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">

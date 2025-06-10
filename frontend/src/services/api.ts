@@ -1,0 +1,300 @@
+// Configuración base de la API
+const API_BASE_URL = 'http://localhost:8000/api/v1';
+
+// Interfaz para respuestas de la API
+interface APIResponse<T> {
+  success: boolean;
+  message: string;
+  data: T[];
+  count: number;
+}
+
+// Interfaz para datos de categoría de la BD
+interface CategoriaDB {
+  id: number;
+  nombre: string;
+  slug: string;
+  descripcion: string | null;
+  parent_id: number | null;
+  imagen_url: string | null;
+  color_tema: string | null;
+  orden_display: number;
+  meta_title: string | null;
+  meta_description: string | null;
+  is_featured: boolean;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// Interfaz para datos de producto de la BD
+interface ProductoDB {
+  id: number;
+  nombre: string;
+  slug: string;
+  descripcion: string | null;
+  descripcion_corta: string | null;
+  precio_base: number;
+  precio_oferta: number | null;
+  categoria_id: number;
+  sku: string | null;
+  stock_disponible: number;
+  stock_minimo: number;
+  requiere_stock: boolean;
+  tiempo_preparacion_hrs: number;
+  peso_gramos: number | null;
+  porciones: number | null;
+  imagen_principal: string | null;
+  is_featured: boolean;
+  is_disponible: boolean;
+  permite_personalizacion: boolean;
+  rating_promedio: number;
+  total_reviews: number;
+  total_ventas: number;
+  meta_title: string | null;
+  meta_description: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// Interfaz para rellenos
+interface RellenoDB {
+  id: number;
+  nombre: string;
+  slug: string;
+  descripcion: string | null;
+  imagen_url: string | null;
+  color_hex: string | null;
+  icono: string | null;
+  precio_adicional: number;
+  is_disponible: boolean;
+  is_premium: boolean;
+  contiene_lactosa: boolean;
+  contiene_gluten: boolean;
+  es_vegano: boolean;
+  requiere_stock: boolean;
+  stock_disponible: number | null;
+  orden_display: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// Interfaz para testimonios
+interface TestimonioDB {
+  id: number;
+  nombre_cliente: string;
+  email_cliente: string | null;
+  telefono_cliente: string | null;
+  producto_id: number;
+  titulo: string | null;
+  comentario: string;
+  rating: number;
+  is_publico: boolean;
+  is_verificado: boolean;
+  is_destacado: boolean;
+  moderado_por: string | null;
+  fecha_moderacion: string | null;
+  notas_moderacion: string | null;
+  ip_origen: string | null;
+  user_agent: string | null;
+  orden_display: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// Función auxiliar para fetch con manejo de errores
+async function apiRequest<T>(endpoint: string): Promise<APIResponse<T> | null> {
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`);
+    
+    if (!response.ok) {
+      console.error(`API Error: ${response.status} - ${response.statusText}`);
+      return null;
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error en la conexión con la API:', error);
+    return null;
+  }
+}
+
+// === SERVICIOS DE CATEGORÍAS ===
+export const categoriaService = {
+  // Obtener todas las categorías activas
+  async getAll(): Promise<CategoriaDB[]> {
+    const response = await apiRequest<CategoriaDB>('/categorias');
+    return response?.data || [];
+  },
+
+  // Obtener categorías destacadas
+  async getFeatured(): Promise<CategoriaDB[]> {
+    const response = await apiRequest<CategoriaDB>('/categorias/destacadas/list');
+    return response?.data || [];
+  },
+
+  // Obtener categoría por ID
+  async getById(id: number): Promise<CategoriaDB | null> {
+    const response = await apiRequest<CategoriaDB>(`/categorias/${id}`);
+    return response?.data?.[0] || null;
+  }
+};
+
+// === SERVICIOS DE PRODUCTOS ===
+export const productoService = {
+  // Obtener todos los productos
+  async getAll(): Promise<ProductoDB[]> {
+    const response = await apiRequest<ProductoDB>('/productos');
+    return response?.data || [];
+  },
+
+  // Obtener productos destacados
+  async getFeatured(): Promise<ProductoDB[]> {
+    const response = await apiRequest<ProductoDB>('/productos/destacados/list');
+    return response?.data || [];
+  },
+
+  // Obtener productos por categoría
+  async getByCategory(categoriaId: number): Promise<ProductoDB[]> {
+    const response = await apiRequest<ProductoDB>(`/productos/categoria/${categoriaId}`);
+    return response?.data || [];
+  },
+
+  // Obtener producto por ID
+  async getById(id: number): Promise<ProductoDB | null> {
+    const response = await apiRequest<ProductoDB>(`/productos/${id}`);
+    return response?.data?.[0] || null;
+  }
+};
+
+// === SERVICIOS DE RELLENOS ===
+export const rellenoService = {
+  // Obtener rellenos disponibles
+  async getDisponibles(): Promise<RellenoDB[]> {
+    const response = await apiRequest<RellenoDB>('/rellenos/disponibles/list');
+    return response?.data || [];
+  },
+
+  // Obtener rellenos para un producto específico
+  async getByProducto(productoId: number): Promise<RellenoDB[]> {
+    const response = await apiRequest<RellenoDB>(`/rellenos/producto/${productoId}`);
+    return response?.data || [];
+  }
+};
+
+// === SERVICIOS DE TESTIMONIOS ===
+export const testimonioService = {
+  // Obtener testimonios públicos
+  async getPublicos(): Promise<TestimonioDB[]> {
+    const response = await apiRequest<TestimonioDB>('/testimonios/publicos/list');
+    return response?.data || [];
+  },
+
+  // Obtener testimonios de un producto
+  async getByProducto(productoId: number): Promise<TestimonioDB[]> {
+    const response = await apiRequest<TestimonioDB>(`/testimonios/producto/${productoId}`);
+    return response?.data || [];
+  }
+};
+
+// === FUNCIONES DE TRANSFORMACIÓN ===
+// Convierte datos de la BD al formato que espera el frontend
+export const transformers = {
+  // Transforma categoría de BD a formato frontend
+  categoriaToFrontend(categoria: CategoriaDB) {
+    return {
+      id: categoria.id,
+      name: categoria.nombre,
+      slug: categoria.slug,
+      description: categoria.descripcion || '',
+      image: categoria.imagen_url || `https://images.unsplash.com/photo-${Math.random().toString(36).substr(2, 9)}?w=600&h=400&fit=crop`,
+      bgColor: categoria.color_tema || 'from-pink-400 to-pink-600',
+      is_featured: categoria.is_featured
+    };
+  },
+
+  // Transforma producto de BD a formato frontend
+  productoToFrontend(producto: ProductoDB) {
+    // Convertir precios a números para evitar errores
+    const precioBase = Number(producto.precio_base) || 0;
+    const precioOferta = producto.precio_oferta ? Number(producto.precio_oferta) : null;
+    const precioFinal = precioOferta || precioBase;
+    
+    return {
+      id: producto.id,
+      title: producto.nombre,
+      name: producto.nombre,
+      category: `Categoría ${producto.categoria_id}`,
+      price: precioFinal,
+      originalPrice: precioOferta ? precioBase : null,
+      discount: precioOferta && precioBase > 0
+        ? `${Math.round((1 - precioOferta / precioBase) * 100)}%`
+        : null,
+      image: producto.imagen_principal || `https://images.unsplash.com/photo-${Math.random().toString(36).substr(2, 9)}?w=300&h=200&fit=crop`,
+      secondImage: undefined as string | undefined, // Se asignará dinámicamente
+      description: producto.descripcion_corta || producto.descripcion || '',
+      rating: Number(producto.rating_promedio) || 0,
+      reviews: Number(producto.total_reviews) || 0,
+      featured: producto.is_featured,
+      inStock: producto.is_disponible && producto.stock_disponible > 0,
+      stock: Number(producto.stock_disponible) || 0
+    };
+  },
+
+  // Transforma relleno de BD a formato frontend
+  rellenoToFrontend(relleno: RellenoDB) {
+    return {
+      id: relleno.id,
+      name: relleno.nombre,
+      description: relleno.descripcion || `${relleno.nombre} premium`,
+      image: relleno.imagen_url || `https://images.unsplash.com/photo-${Math.random().toString(36).substr(2, 9)}?w=100&h=100&fit=crop`,
+      price: relleno.precio_adicional,
+      isPremium: relleno.is_premium,
+      isVegan: relleno.es_vegano,
+      containsLactose: relleno.contiene_lactosa,
+      containsGluten: relleno.contiene_gluten
+    };
+  },
+
+  // Transforma testimonio de BD a formato frontend
+  testimonioToFrontend(testimonio: TestimonioDB) {
+    return {
+      id: testimonio.id,
+      customerName: testimonio.nombre_cliente,
+      title: testimonio.titulo || '',
+      comment: testimonio.comentario,
+      rating: testimonio.rating,
+      isHighlighted: testimonio.is_destacado,
+      isVerified: testimonio.is_verificado,
+      productId: testimonio.producto_id,
+      date: testimonio.created_at
+    };
+  }
+};
+
+// === FUNCIONES DE UTILIDAD ===
+export const apiUtils = {
+  // Obtiene imagen por defecto si no hay imagen
+  getDefaultImage(type: 'producto' | 'categoria' | 'relleno'): string {
+    const imageMap = {
+      producto: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=300&fit=crop',
+      categoria: 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=600&h=400&fit=crop',
+      relleno: 'https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=100&h=100&fit=crop'
+    };
+    return imageMap[type];
+  },
+
+  // Formatea precio a formato peruano
+  formatPrice(price: number): string {
+    return `S/ ${price.toFixed(2)}`;
+  },
+
+  // Calcula porcentaje de descuento
+  calculateDiscount(originalPrice: number, salePrice: number): number {
+    return Math.round((1 - salePrice / originalPrice) * 100);
+  }
+}; 

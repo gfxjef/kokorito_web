@@ -1,6 +1,6 @@
 'use client';
-import Image from 'next/image';
 import { topProducts } from '@/data/staticData';
+import ProductImageHover from '@/components/shared/ProductImageHover';
 
 export default function TopProducts() {
   return (
@@ -13,11 +13,14 @@ export default function TopProducts() {
             <div key={product.id} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow duration-200">
               <div className="flex items-center space-x-4">
                 <div className="relative w-16 h-16 flex-shrink-0">
-                  <Image
-                    src={product.image}
-                    alt={product.title}
-                    fill
-                    className="object-cover rounded-lg"
+                  <ProductImageHover 
+                    product={{
+                      image: product.image,
+                      name: product.title,
+                      // Los productos top estáticos no tienen secondImage
+                    }}
+                    className="w-full h-full rounded-lg"
+                    showIndicator={false}
                   />
                 </div>
                 <div className="flex-1 min-w-0">
