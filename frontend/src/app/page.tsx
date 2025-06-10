@@ -1,5 +1,5 @@
 import Header from '@/components/Header';
-import PromoSlider from '@/components/PromoBanner';
+import HeroCarousel from '@/components/HeroCarousel';
 import BestSellers from '@/components/BestSellers';
 import CategoriesGrid from '@/components/CategoriesGrid';
 import CustomerStories from '@/components/CustomerStories';
@@ -13,7 +13,7 @@ export default function Home() {
       
       {/* Main Content - Full Width */}
       <main>
-        <PromoSlider />
+        <HeroCarousel />
         <BestSellers />
         <CategoriesGrid />
         <CustomerStories />
