@@ -13,14 +13,14 @@ export interface Producto {
   stock_disponible: number
   stock_minimo: number
   peso_gramos?: number
-  tiempo_preparacion_minutos: number
+  tiempo_preparacion_hrs: number
   ingredientes?: string
   informacion_nutricional?: string
   imagen_principal?: string
   orden_display: number
   is_active: boolean
   is_disponible: boolean
-  is_destacado: boolean
+  is_featured: boolean
   requiere_refrigeracion: boolean
   apto_veganos: boolean
   contiene_gluten: boolean
@@ -44,14 +44,14 @@ export interface ProductoForm {
   stock_disponible: number
   stock_minimo: number
   peso_gramos?: number
-  tiempo_preparacion_minutos: number
+  tiempo_preparacion_hrs: number
   ingredientes?: string
   informacion_nutricional?: string
   imagen_principal?: string
   orden_display: number
   is_active: boolean
   is_disponible: boolean
-  is_destacado: boolean
+  is_featured: boolean
   requiere_refrigeracion: boolean
   apto_veganos: boolean
   contiene_gluten: boolean
@@ -64,6 +64,6 @@ export interface ProductoFilters {
   categoria_id?: number
   is_active?: boolean
   is_disponible?: boolean
-  is_destacado?: boolean
+  is_featured?: boolean
   search?: string
 } 

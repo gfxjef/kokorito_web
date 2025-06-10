@@ -1,9 +1,9 @@
 'use client';
-import { useBestSellers } from '@/hooks/useApiData';
+import { useBestSellersOptimized } from '@/context/GlobalDataContext';
 import ProductImageHover from '@/components/shared/ProductImageHover';
 
 export default function BestSellers() {
-  const { data: bestSellers, loading, error } = useBestSellers();
+  const { data: bestSellers, loading, error } = useBestSellersOptimized();
 
   return (
     <section className="py-12 bg-white">

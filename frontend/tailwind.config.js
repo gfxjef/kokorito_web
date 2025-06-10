@@ -20,6 +20,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        pacifico: ['Pacifico', 'cursive'],
       },
     },
   },

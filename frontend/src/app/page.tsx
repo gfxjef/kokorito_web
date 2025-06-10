@@ -4,6 +4,7 @@ import BestSellers from '@/components/BestSellers';
 import CategoriesGrid from '@/components/CategoriesGrid';
 import CustomerStories from '@/components/CustomerStories';
 import Footer from '@/components/Footer';
+import DebugGlobalData from '@/components/DebugGlobalData';
 
 export default function Home() {
   return (
@@ -19,6 +20,9 @@ export default function Home() {
       </main>
       
       <Footer />
+      
+      {/* Debug component - remover en producción */}
+      <DebugGlobalData />
     </div>
   );
 } 

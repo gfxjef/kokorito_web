@@ -45,14 +45,14 @@ export default function ProductoForm({ producto, isEdit = false }: ProductoFormP
     stock_disponible: producto?.stock_disponible || 0,
     stock_minimo: producto?.stock_minimo || 5,
     peso_gramos: producto?.peso_gramos || 0,
-    tiempo_preparacion_minutos: producto?.tiempo_preparacion_minutos || 60,
+    tiempo_preparacion_hrs: producto?.tiempo_preparacion_hrs || 60,
     ingredientes: producto?.ingredientes || '',
     informacion_nutricional: producto?.informacion_nutricional || '',
     imagen_principal: producto?.imagen_principal || '',
     orden_display: producto?.orden_display || 1,
     is_active: producto?.is_active ?? true,
     is_disponible: producto?.is_disponible ?? true,
-    is_destacado: producto?.is_destacado ?? false,
+    is_featured: producto?.is_featured ?? false,
     requiere_refrigeracion: producto?.requiere_refrigeracion ?? false,
     apto_veganos: producto?.apto_veganos ?? false,
     contiene_gluten: producto?.contiene_gluten ?? false,
@@ -492,8 +492,8 @@ export default function ProductoForm({ producto, isEdit = false }: ProductoFormP
               <input
                 type="number"
                 min="0"
-                value={formData.tiempo_preparacion_minutos}
-                onChange={(e) => handleInputChange('tiempo_preparacion_minutos', parseInt(e.target.value) || 0)}
+                value={formData.tiempo_preparacion_hrs}
+                onChange={(e) => handleInputChange('tiempo_preparacion_hrs', parseInt(e.target.value) || 0)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
@@ -567,8 +567,8 @@ export default function ProductoForm({ producto, isEdit = false }: ProductoFormP
               />
               
               <Toggle
-                enabled={formData.is_destacado}
-                onChange={(value) => handleInputChange('is_destacado', value)}
+                enabled={formData.is_featured}
+                onChange={(value) => handleInputChange('is_featured', value)}
                 label="Producto Destacado"
               />
               

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { GlobalDataProvider } from '@/context/GlobalDataContext'
 
 export const metadata: Metadata = {
   title: 'Kokorito - Las Mejores Tortas y Keks Online',
@@ -13,8 +14,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
+      <head>
+        <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+      </head>
       <body className="font-sans antialiased">
-        {children}
+        <GlobalDataProvider>
+          {children}
+        </GlobalDataProvider>
       </body>
     </html>
   )

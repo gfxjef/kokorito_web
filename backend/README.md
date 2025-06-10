@@ -11,13 +11,7 @@ pip install -r requirements.txt
 
 ### 2. Configurar variables de entorno
 Crear archivo `.env` en la raíz con:
-```env
-DB_HOST=atusaludlicoreria.com
-DB_NAME=atusalud_kokorito
-DB_PASSWORD=kmachin1
-DB_PORT=3306
-DB_USER=atusalud_atusalud
-```
+
 
 ### 3. Iniciar servidor
 ```bash
