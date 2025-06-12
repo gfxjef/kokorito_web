@@ -102,7 +102,7 @@ export default function CategoriesGrid() {
                       </div>
 
                       {/* Info del producto */}
-                      <div className="p-3">
+                      <div className="p-3 relative">
                         <h4 className="font-medium text-sm text-gray-800 mb-2 line-clamp-2 group-hover:text-primary transition-colors">
                           {product.name || product.title}
                         </h4>
@@ -136,6 +136,15 @@ export default function CategoriesGrid() {
                         <div className="text-xs text-green-600 mt-1">
                           🚚 Envío gratis
                         </div>
+
+                        {/* Botón de Agregar en hover - En la sección de textos, parte derecha inferior */}
+                        <button 
+                          className={`absolute bottom-3 right-3 px-3 py-1 rounded-lg font-semibold text-xs text-white transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 shadow-lg ${
+                            lineColors[categoryIndex % lineColors.length]
+                          }`}
+                        >
+                          Agregar
+                        </button>
                       </div>
                     </div>
                   </div>

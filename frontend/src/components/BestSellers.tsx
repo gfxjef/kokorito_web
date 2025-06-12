@@ -6,7 +6,7 @@ export default function BestSellers() {
   const { data: bestSellers, loading, error } = useBestSellersOptimized();
 
   return (
-    <section className="py-12 bg-white">
+    <section className="pb-12 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -51,7 +51,7 @@ export default function BestSellers() {
                   </button>
                 </div>
                 
-                <div className="p-4">
+                <div className="p-4 relative">
                   <h3 className="font-semibold text-text text-sm leading-tight mb-1">
                     {product.title || product.name}
                   </h3>
@@ -79,21 +79,16 @@ export default function BestSellers() {
                         <span className="text-gray-500 text-xs ml-1">({product.reviews || 0})</span>
                       </div>
                     </div>
-                    <button 
-                      className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
-                        product.inStock 
-                          ? 'bg-accent text-white hover:bg-teal-600' 
-                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      }`}
-                      disabled={!product.inStock}
-                    >
-                      {product.inStock ? 'Agregar' : 'Agotado'}
-                    </button>
                   </div>
                   
                   <div className="mt-2 text-xs text-accent font-semibold">
                     🚚 Envío gratis
                   </div>
+
+                  {/* Botón de Agregar en hover - En la sección de textos, parte derecha inferior */}
+                  <button className="absolute bottom-4 right-4 bg-primary text-white px-3 py-1 rounded-lg font-semibold text-xs transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 shadow-lg">
+                    Agregar
+                  </button>
                 </div>
               </div>
             ))

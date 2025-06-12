@@ -73,8 +73,12 @@ export default function HeroCarousel() {
   const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi])
   const scrollTo = useCallback((index: number) => emblaApi && emblaApi.scrollTo(index), [emblaApi])
 
+  // Obtener la imagen del slide actual
+  const currentSlideImage = slides[selectedIndex]?.image || slides[0].image
+
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-visible min-h-[600px] lg:min-h-[700px]">
+      {/* Slides principales */}
       <div className="embla" ref={emblaRef}>
         <div className="embla__container flex">
           {slides.map((slide) => (
@@ -150,44 +154,89 @@ export default function HeroCarousel() {
         </div>
       </div>
 
-      {/* Controles de navegación */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-        <div className="flex items-center space-x-6">
-          
-          {/* Dots indicadores */}
-          <div className="flex space-x-3">
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => scrollTo(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === selectedIndex 
-                    ? 'bg-warning scale-125 shadow-lg' 
-                    : 'bg-white/50 hover:bg-white/70'
-                }`}
+      {/* SVG Overlay Fijo - Desde el centro del slider hacia la derecha, centrado verticalmente */}
+      <div 
+        className="absolute z-30 pointer-events-none"
+        style={{
+          width: '733px',
+          height: '688px', 
+          top: 'calc(50% - 380px)', // Posicionamiento ajustado para mejor integración visual
+          left: '46%', // Ajustado para mejor posicionamiento visual
+          transform: 'translateX(0)' // Sin desplazamiento adicional
+        }}
+      >
+        <svg 
+          className="w-full h-full" 
+          viewBox="0 0 1891.12 1770.13" 
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <defs>
+            {/* Patrón con la imagen del slide actual */}
+            <pattern 
+              id="slideImagePattern"
+              patternUnits="objectBoundingBox" 
+              width="1" 
+              height="1"
+            >
+              <image 
+                href={currentSlideImage} 
+                x="0"
+                y="0" 
+                width="100%" 
+                height="100%" 
+                preserveAspectRatio="xMidYMid slice"
               />
-            ))}
-          </div>
+            </pattern>
+          </defs>
+          
+          {/* Path principal del SVG con la imagen como relleno */}
+          <path 
+            fill="url(#slideImagePattern)"
+            d="M.83,854.32h.04c-.16,4.79-.24,9.57-.15,14.33.76,41.12,17.21,82.16,30.02,108.09,8.29,16.79,15.07,27.26,15.07,27.26,0,0-3.38,7.34-4.89,18.08-3.33,23.72-1.35,47.22,5.3,68.8,11.84,38.41,38.52,70.75,76.73,87.38.12,10.66,5.23,19.04,11.89,25.44-21.96,46.82-22.2,95.64-17.09,127.46,0,.02,0,.05.01.07h0c-.29,3.15-.55,6.34-.72,9.63-5.88,160.51,141.94,158.34,158.34,158.34,0,0,16.55,62.31,79.61,102.12-6.14,85.13,7.76,104.85,42.79,144.21,36.41,40.92,89.94,25.37,85.78-7.02-4.16-32.38-9.14-44.69,55.26-57.07,45.13-8.68,53.75-45.72,54.87-67.12,28.07-12.22,41.79-25.4,41.79-25.4,0,0,59.5,66.22,217.95,88.5,250.72,35.25,497.87-82.09,592.91-260.29,80.9-33.19,198.07-104.69,220.5-308.73,66.23-9.46,117.39-20.25,191.19-108.59,37.91-45.38,54.5-103.19,47.71-157.95-.01-.11-.04-.22-.05-.33,3.83-30.61,7.98-84.27-57.85-159.67.01-.02.03-.03.04-.05,34.53-44.12,60.01-119.2,51.01-178.43-11.17-73.5-49.76-193.87-185.87-213-79.88-11.23-129.35.8-156.59,12.66h0c-10.87-23.29-50.88-90.49-150.76-132.88-83.71-32.62-136.31-14.41-136.31-14.41,0,0-59.63-128.33-228.82-152.11-169.19-23.79-256.94,76.47-269.59,96.58-68.69-33.63-215.9-39.53-291.64,50.58-43.79,48.21-56.72,73.5-56.72,73.5,0,0-162.58-4.05-205.66,154.07-20.7,80.47,10.54,163.99,10.54,163.99h0c1.56,5.44,3.25,10.71,5.03,15.82-27.72.27-120.14,9.24-178.07,112.16C-8.86,736.73.83,854.32.83,854.32Z"
+          />
+        </svg>
+      </div>
 
-          {/* Flechas de navegación */}
-          <div className="flex space-x-2">
-            <button
-              onClick={scrollPrev}
-              className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-3 rounded-full transition-all hover:scale-110 border border-white/30"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
+      {/* Controles de navegación - Alineados a la izquierda dentro del contenedor */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-40 w-full">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-start space-x-6">
             
-            <button
-              onClick={scrollNext}
-              className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-3 rounded-full transition-all hover:scale-110 border border-white/30"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+            {/* Dots indicadores */}
+            <div className="flex space-x-3">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => scrollTo(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    index === selectedIndex 
+                      ? 'bg-primary scale-125 shadow-lg' 
+                      : 'bg-white/60 hover:bg-primary/70'
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Flechas de navegación */}
+            <div className="flex space-x-2">
+              <button
+                onClick={scrollPrev}
+                className="bg-primary/90 backdrop-blur-sm hover:bg-primary text-white p-3 rounded-full transition-all hover:scale-110 shadow-lg border border-primary/30"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              
+              <button
+                onClick={scrollNext}
+                className="bg-primary/90 backdrop-blur-sm hover:bg-primary text-white p-3 rounded-full transition-all hover:scale-110 shadow-lg border border-primary/30"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
