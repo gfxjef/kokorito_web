@@ -77,13 +77,13 @@ export default function HeroCarousel() {
   const currentSlideImage = slides[selectedIndex]?.image || slides[0].image
 
   return (
-    <section className="relative overflow-visible min-h-[600px] lg:min-h-[700px]">
+    <section className="relative overflow-visible min-h-[526px] lg:min-h-[700px]">
       {/* Slides principales */}
       <div className="embla" ref={emblaRef}>
         <div className="embla__container flex">
           {slides.map((slide) => (
             <div key={slide.id} className="embla__slide flex-[0_0_100%] min-w-0">
-              <div className="relative min-h-[500px] lg:min-h-[600px] overflow-hidden">
+              <div className="relative min-h-[450px] lg:min-h-[600px] overflow-hidden">
                 {/* Imagen de fondo completa */}
                 <div 
                   className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -117,8 +117,8 @@ export default function HeroCarousel() {
                         {slide.description}
                       </p>
 
-                      {/* Características especiales */}
-                      <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                      {/* Características especiales - Solo visible en desktop */}
+                      <div className="hidden lg:flex flex-col sm:flex-row gap-4 mb-8">
                         <div className="bg-white/15 backdrop-blur-sm rounded-lg p-4 border border-white/30">
                           <div className="flex items-center mb-2">
                             <span className="text-warning text-2xl font-bold">🎂</span>
@@ -154,9 +154,9 @@ export default function HeroCarousel() {
         </div>
       </div>
 
-      {/* SVG Overlay Fijo - Desde el centro del slider hacia la derecha, centrado verticalmente */}
+      {/* SVG Overlay Fijo - Solo visible en desktop */}
       <div 
-        className="absolute z-30 pointer-events-none"
+        className="hidden lg:block absolute z-30 pointer-events-none"
         style={{
           width: '733px',
           height: '688px', 
@@ -197,49 +197,7 @@ export default function HeroCarousel() {
         </svg>
       </div>
 
-      {/* Controles de navegación - Alineados a la izquierda dentro del contenedor */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-40 w-full">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-start space-x-6">
-            
-            {/* Dots indicadores */}
-            <div className="flex space-x-3">
-              {slides.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => scrollTo(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === selectedIndex 
-                      ? 'bg-primary scale-125 shadow-lg' 
-                      : 'bg-white/60 hover:bg-primary/70'
-                  }`}
-                />
-              ))}
-            </div>
 
-            {/* Flechas de navegación */}
-            <div className="flex space-x-2">
-              <button
-                onClick={scrollPrev}
-                className="bg-primary/90 backdrop-blur-sm hover:bg-primary text-white p-3 rounded-full transition-all hover:scale-110 shadow-lg border border-primary/30"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              
-              <button
-                onClick={scrollNext}
-                className="bg-primary/90 backdrop-blur-sm hover:bg-primary text-white p-3 rounded-full transition-all hover:scale-110 shadow-lg border border-primary/30"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Estilos CSS para Embla */}
       <style jsx>{`
@@ -251,6 +209,7 @@ export default function HeroCarousel() {
         }
         .embla__slide {
           position: relative;
+          min-width: 0;
         }
       `}</style>
     </section>

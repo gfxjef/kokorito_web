@@ -33,20 +33,130 @@ a {
   text-decoration: none;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+/* Ocultar scrollbar horizontal para elementos con overflow-x-auto */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
 }
 
-::-webkit-scrollbar-thumb {
-  background: #FF6B9D;
-  border-radius: 4px;
+/* Responsive customizations */
+@media (max-width: 1023px) {
+  .pb-12 {
+    padding-bottom: 0 !important;
+  }
+
+  .space-y-8 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: 0 !important;
+    margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+  }
+
+  .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: 0 !important;
+    margin-bottom: calc(0.75rem * var(--tw-space-y-reverse));
+  }
+
+  .text-2xl {
+    font-size: 1.1rem !important;
+  }
+
+  /* Títulos de categorías más compactos en móvil */
+  .font-pacifico {
+    font-size: 1.8rem !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Optimización del hero carousel en móvil */
+  .min-h-\[526px\] {
+    min-height: 450px !important;
+  }
+
+  /* Estilos específicos para tarjetas de productos en mobile */
+  .w-72 {
+    width: 22rem !important;
+  }
+
+  .ml-4 {
+    margin-left: 0rem !important;
+  }
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #4ECDC4;
+/* Animaciones personalizadas para el sidebar móvil */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slideInFromRight 0.3s ease-out forwards;
+}
+
+.animate-slide-out-right {
+  animation: slideOutToRight 0.3s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+.animate-fade-out {
+  animation: fadeIn 0.2s ease-out reverse forwards;
+}
+
+/* Animaciones para expansión del search bar */
+@keyframes expandSearch {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.02);
+    opacity: 0;
+  }
+}
+
+@keyframes contractSearch {
+  from {
+    transform: scale(1.02);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-expand-search {
+  animation: expandSearch 0.2s ease-out forwards;
+}
+
+.animate-contract-search {
+  animation: contractSearch 0.2s ease-out forwards;
 } 

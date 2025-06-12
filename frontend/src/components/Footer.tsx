@@ -16,11 +16,11 @@ export default function Footer() {
     <footer className="bg-text text-white">
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
           {/* Company Info */}
-          <div>
-            <h3 className="text-2xl font-bold text-primary mb-4">Kokorito</h3>
-            <p className="text-gray-300 mb-4">
+          <div className="col-span-2 lg:col-span-1">
+            <h3 className="text-xl lg:text-2xl font-bold text-primary mb-3 lg:mb-4">Kokorito</h3>
+            <p className="text-gray-300 mb-3 lg:mb-4 text-sm lg:text-base">
               Las mejores tortas artesanales de Lima. Endulzamos tus momentos especiales desde 2020.
             </p>
             <div className="space-y-2 text-sm text-gray-300">
@@ -48,7 +48,7 @@ export default function Footer() {
 
           {/* Categories */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Nuestras Categorías</h4>
+            <h4 className="text-base lg:text-lg font-semibold mb-3 lg:mb-4">Nuestras Categorías</h4>
             <ul className="space-y-2">
               {categories.map((category, index) => (
                 <li key={index}>
@@ -62,7 +62,7 @@ export default function Footer() {
 
           {/* Customer Service */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Atención al Cliente</h4>
+            <h4 className="text-base lg:text-lg font-semibold mb-3 lg:mb-4">Atención al Cliente</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="#" className="text-gray-300 hover:text-primary transition-colors">Centro de Ayuda</a></li>
               <li><a href="#" className="text-gray-300 hover:text-primary transition-colors">Cómo Pedir</a></li>
@@ -75,8 +75,8 @@ export default function Footer() {
           </div>
 
           {/* Social Media & Newsletter */}
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Síguenos</h4>
+          <div className="col-span-2 lg:col-span-1">
+            <h4 className="text-base lg:text-lg font-semibold mb-3 lg:mb-4">Síguenos</h4>
             <div className="flex space-x-3 mb-6">
               <a href="#" className="bg-primary hover:bg-pink-600 p-2 rounded-full transition-colors">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
