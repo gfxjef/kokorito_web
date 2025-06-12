@@ -1,5 +1,5 @@
 // Configuración base de la API
-const API_BASE_URL = 'http://localhost:8000/api/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL + '/api/v1';
 
 // Interfaz para respuestas de la API
 interface APIResponse<T> {

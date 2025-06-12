@@ -8,7 +8,7 @@ const isClientSide = typeof window !== 'undefined'
 // En el servidor (SSR), usamos la URL directa del backend
 const API_BASE_URL = isClientSide 
   ? '/api/backend/v1'  // Proxy de Next.js (cliente)
-  : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000') + '/api/v1'  // Directo (servidor)
+  : process.env.NEXT_PUBLIC_API_URL + '/api/v1'  // Directo (servidor)
 
 const API_VERSION = ''  // Ya incluido en la base URL
 

@@ -241,7 +241,7 @@ const cacheUtils = {
 // API calls - SOLO 3 CONSULTAS GLOBALES
 const apiService = {
   async fetchAllData(): Promise<{ categorias: CategoriaDB[], productos: ProductoDB[], imagenes: ProductoImagenDB[] }> {
-    const API_BASE_URL = 'http://localhost:8000/api/v1';
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL + '/api/v1';
     
     try {
       // Las 3 consultas principales EN PARALELO

@@ -75,7 +75,7 @@ export default function RellenosList() {
             Reintentar
           </button>
           <div className="text-sm text-red-600">
-            Verifica que el backend esté ejecutándose en http://localhost:8000
+            Verifica que el backend esté ejecutándose en {process.env.NEXT_PUBLIC_API_URL || 'la URL configurada en .env.local'}
           </div>
         </div>
       </div>

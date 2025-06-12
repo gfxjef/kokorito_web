@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from api.routes import router
 
 # ============================================
@@ -20,7 +21,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # En producción cambiar por dominios específicos
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"],  # Agregar HEAD y OPTIONS
     allow_headers=["*"],
 )
 
@@ -33,6 +34,7 @@ app.include_router(router, prefix="/api/v1")
 # ENDPOINT RAÍZ
 # ============================================
 @app.get("/", tags=["Sistema"])
+@app.head("/", tags=["Sistema"])  # Agregar soporte para HEAD
 async def root():
     """Endpoint raíz de la API"""
     return {
@@ -59,21 +61,27 @@ async def root():
 # ============================================
 @app.exception_handler(404)
 async def not_found_handler(request, exc):
-    return {
-        "success": False,
-        "message": "Endpoint no encontrado",
-        "error": "404 - Not Found",
-        "documentation": "/docs"
-    }
+    return JSONResponse(
+        status_code=404,
+        content={
+            "success": False,
+            "message": "Endpoint no encontrado",
+            "error": "404 - Not Found",
+            "documentation": "/docs"
+        }
+    )
 
 @app.exception_handler(500)
 async def internal_error_handler(request, exc):
-    return {
-        "success": False,
-        "message": "Error interno del servidor",
-        "error": "500 - Internal Server Error",
-        "support": "Contacta al administrador del sistema"
-    }
+    return JSONResponse(
+        status_code=500,
+        content={
+            "success": False,
+            "message": "Error interno del servidor",
+            "error": "500 - Internal Server Error",
+            "support": "Contacta al administrador del sistema"
+        }
+    )
 
 if __name__ == "__main__":
     import uvicorn

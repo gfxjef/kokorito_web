@@ -1,20 +1,59 @@
 /** @type {import('next').NextConfig} */
+const { readFileSync } = require('fs')
+const { join } = require('path')
+
+// Función para cargar .env.local manualmente
+function loadEnvLocal() {
+  try {
+    const envPath = join(__dirname, '.env.local')
+    const envFile = readFileSync(envPath, 'utf8')
+    const envLines = envFile.split('\n').filter(line => line.trim() && !line.startsWith('#'))
+    
+    const envVars = {}
+    envLines.forEach(line => {
+      const equalsIndex = line.indexOf('=')
+      if (equalsIndex > 0) {
+        const key = line.substring(0, equalsIndex).trim()
+        const value = line.substring(equalsIndex + 1).trim()
+        if (key && value) {
+          envVars[key] = value
+        }
+      }
+    })
+    
+    console.log('📄 Variables cargadas desde .env.local:', Object.keys(envVars))
+    return envVars
+  } catch (error) {
+    console.error('❌ Error: No se pudo cargar .env.local:', error.message)
+    throw new Error('Crea el archivo .env.local con NEXT_PUBLIC_API_URL')
+  }
+}
+
+const envVars = loadEnvLocal()
+const API_URL = envVars.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_URL
+
+// Validar que la variable esté configurada
+if (!API_URL) {
+  throw new Error('❌ NEXT_PUBLIC_API_URL no está configurada en .env.local')
+}
+
 const nextConfig = {
   images: {
     domains: ['images.unsplash.com', 'via.placeholder.com', 'picsum.photos'],
   },
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
+    NEXT_PUBLIC_API_URL: API_URL,
   },
   eslint: {
     // Permitir warnings durante el build
     ignoreDuringBuilds: false,
   },
   async rewrites() {
+    console.log('🔧 Configurando rewrite con URL:', API_URL)
     return [
       {
         source: '/api/backend/:path*',
-        destination: 'http://localhost:8000/api/:path*',
+        destination: `${API_URL}/api/:path*`,
       },
     ]
   },

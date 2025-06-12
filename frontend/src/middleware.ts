@@ -7,7 +7,15 @@ export function middleware(request: NextRequest) {
     const apiPath = request.nextUrl.pathname.replace('/api/backend/', '/api/')
     
     // Construir la URL del backend
-    const backendUrl = `http://localhost:8000${apiPath}${request.nextUrl.search}`
+    const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL
+    
+    // Validar que la variable de entorno esté configurada
+    if (!BACKEND_URL) {
+      console.error('❌ NEXT_PUBLIC_API_URL no está configurada en .env.local')
+      return new NextResponse('Backend URL not configured', { status: 500 })
+    }
+    
+    const backendUrl = `${BACKEND_URL}${apiPath}${request.nextUrl.search}`
     
     console.log('🔄 Proxy middleware:', {
       method: request.method,
@@ -18,7 +26,8 @@ export function middleware(request: NextRequest) {
 
     // Crear headers para el backend
     const headers = new Headers(request.headers)
-    headers.set('host', 'localhost:8000')
+    const backendHost = BACKEND_URL.replace(/^https?:\/\//, '') // Remover protocolo
+    headers.set('host', backendHost)
     
     // Crear la petición al backend
     const backendRequest = new Request(backendUrl, {
