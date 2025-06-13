@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
     
     // Validar que la variable de entorno esté configurada
     if (!BACKEND_URL) {
-      console.error('❌ NEXT_PUBLIC_API_URL no está configurada en .env.local')
+      console.error('❌ NEXT_PUBLIC_API_URL no está configurada en .env')
       return new NextResponse('Backend URL not configured', { status: 500 })
     }
     

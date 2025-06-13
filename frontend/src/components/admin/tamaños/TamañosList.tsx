@@ -76,7 +76,7 @@ export default function TamañosList() {
             Reintentar
           </button>
           <div className="text-sm text-red-600">
-            Verifica que el backend esté ejecutándose en {process.env.NEXT_PUBLIC_API_URL || 'la URL configurada en .env.local'}
+            Verifica que el backend esté ejecutándose en {process.env.NEXT_PUBLIC_API_URL || 'la URL configurada en .env'}
           </div>
         </div>
       </div>
