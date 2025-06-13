@@ -2,10 +2,10 @@
 const { readFileSync } = require('fs')
 const { join } = require('path')
 
-// Función para cargar .env.local manualmente
+// Función para cargar .env manualmente
 function loadEnvLocal() {
   try {
-    const envPath = join(__dirname, '.env.local')
+    const envPath = join(__dirname, '.env')
     const envFile = readFileSync(envPath, 'utf8')
     const envLines = envFile.split('\n').filter(line => line.trim() && !line.startsWith('#'))
     
