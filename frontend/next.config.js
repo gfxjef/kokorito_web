@@ -2,8 +2,14 @@
 const { readFileSync } = require('fs')
 const { join } = require('path')
 
-// Función para cargar .env manualmente
+// Función para cargar .env manualmente solo en desarrollo
 function loadEnvLocal() {
+  // Solo intentar cargar .env en desarrollo local
+  if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
+    console.log('🚀 Ejecutándose en Vercel/Production - usando variables de entorno del sistema')
+    return {}
+  }
+
   try {
     const envPath = join(__dirname, '.env')
     const envFile = readFileSync(envPath, 'utf8')
@@ -24,18 +30,29 @@ function loadEnvLocal() {
     console.log('📄 Variables cargadas desde .env:', Object.keys(envVars))
     return envVars
   } catch (error) {
-    console.error('❌ Error: No se pudo cargar .env:', error.message)
-    throw new Error('Crea el archivo .env con NEXT_PUBLIC_API_URL')
+    console.warn('⚠️ Advertencia: No se pudo cargar .env local:', error.message)
+    console.log('💡 Tip: Crea el archivo .env con NEXT_PUBLIC_API_URL para desarrollo local')
+    return {}
   }
 }
 
+// Cargar variables de entorno
 const envVars = loadEnvLocal()
+
+// Obtener API_URL desde variables locales o del sistema
 const API_URL = envVars.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_URL
 
 // Validar que la variable esté configurada
 if (!API_URL) {
-  throw new Error('❌ NEXT_PUBLIC_API_URL no está configurada en .env')
+  const errorMsg = process.env.VERCEL 
+    ? '❌ NEXT_PUBLIC_API_URL no está configurada en Vercel. Ve a Dashboard > Project > Settings > Environment Variables'
+    : '❌ NEXT_PUBLIC_API_URL no está configurada. Crea el archivo .env con NEXT_PUBLIC_API_URL'
+  
+  console.error(errorMsg)
+  throw new Error(errorMsg)
 }
+
+console.log('✅ API_URL configurada:', API_URL)
 
 const nextConfig = {
   images: {
