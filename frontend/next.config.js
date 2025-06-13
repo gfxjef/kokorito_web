@@ -21,11 +21,11 @@ function loadEnvLocal() {
       }
     })
     
-    console.log('📄 Variables cargadas desde .env.local:', Object.keys(envVars))
+    console.log('📄 Variables cargadas desde .env:', Object.keys(envVars))
     return envVars
   } catch (error) {
-    console.error('❌ Error: No se pudo cargar .env.local:', error.message)
-    throw new Error('Crea el archivo .env.local con NEXT_PUBLIC_API_URL')
+    console.error('❌ Error: No se pudo cargar .env:', error.message)
+    throw new Error('Crea el archivo .env con NEXT_PUBLIC_API_URL')
   }
 }
 
@@ -34,7 +34,7 @@ const API_URL = envVars.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_URL
 
 // Validar que la variable esté configurada
 if (!API_URL) {
-  throw new Error('❌ NEXT_PUBLIC_API_URL no está configurada en .env.local')
+  throw new Error('❌ NEXT_PUBLIC_API_URL no está configurada en .env')
 }
 
 const nextConfig = {
