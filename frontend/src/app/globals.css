@@ -43,6 +43,24 @@ a {
   display: none;  /* Chrome, Safari and Opera */
 }
 
+/* Custom scrollbar para el chat de WhatsApp */
+.chat-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
 /* Responsive customizations */
 @media (max-width: 1023px) {
   .pb-12 {

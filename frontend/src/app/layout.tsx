@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { GlobalDataProvider } from '@/context/GlobalDataContext'
+import WhatsAppToggle from '@/components/WhatsAppToggle'
 
 export const metadata: Metadata = {
   title: 'Kokorito - Las Mejores Tortas y Keks Online',
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <GlobalDataProvider>
           {children}
+          <WhatsAppToggle />
         </GlobalDataProvider>
       </body>
     </html>
