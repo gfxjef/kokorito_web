@@ -129,7 +129,23 @@ async def create_producto(producto: ProductoCreate):
 @router.put("/productos/{producto_id}", tags=["Productos"])
 async def update_producto(producto_id: int, producto: ProductoUpdate):
     """Actualiza un producto existente"""
-    response = producto_service.update(producto_id, producto.dict(exclude_unset=True))
+    product_data = producto.dict(exclude_unset=True)
+    
+    # Extraer relaciones si están presentes
+    rellenos_ids = product_data.pop('rellenos_ids', None)
+    tamaños_ids = product_data.pop('tamaños_ids', None)
+    
+    # Usar el método que maneja relaciones si hay relaciones, sino el método normal
+    if rellenos_ids is not None or tamaños_ids is not None:
+        response = producto_service.update_with_relations(
+            producto_id, 
+            product_data, 
+            rellenos_ids, 
+            tamaños_ids
+        )
+    else:
+        response = producto_service.update(producto_id, product_data)
+    
     if not response.success:
         raise HTTPException(status_code=404, detail=response.message)
     return response
@@ -429,6 +445,38 @@ async def get_producto_tamaños():
     response = producto_tamaño_service.get_all(active_only=False)
     if not response.success:
         raise HTTPException(status_code=500, detail=response.message)
+    return response
+
+@router.post("/producto-rellenos", tags=["Relaciones"])
+async def create_producto_relleno(producto_id: int, relleno_id: int):
+    """Crea una relación producto-relleno"""
+    response = producto_relleno_service.create_relation(producto_id, relleno_id)
+    if not response.success:
+        raise HTTPException(status_code=400, detail=response.message)
+    return response
+
+@router.delete("/producto-rellenos", tags=["Relaciones"])
+async def delete_producto_relleno(producto_id: int, relleno_id: int):
+    """Elimina una relación producto-relleno"""
+    response = producto_relleno_service.delete_relation(producto_id, relleno_id)
+    if not response.success:
+        raise HTTPException(status_code=404, detail=response.message)
+    return response
+
+@router.post("/producto-tamaños", tags=["Relaciones"])
+async def create_producto_tamaño(producto_id: int, tamaño_id: int):
+    """Crea una relación producto-tamaño"""
+    response = producto_tamaño_service.create_relation(producto_id, tamaño_id)
+    if not response.success:
+        raise HTTPException(status_code=400, detail=response.message)
+    return response
+
+@router.delete("/producto-tamaños", tags=["Relaciones"])
+async def delete_producto_tamaño(producto_id: int, tamaño_id: int):
+    """Elimina una relación producto-tamaño"""
+    response = producto_tamaño_service.delete_relation(producto_id, tamaño_id)
+    if not response.success:
+        raise HTTPException(status_code=404, detail=response.message)
     return response
 
 # ============================================

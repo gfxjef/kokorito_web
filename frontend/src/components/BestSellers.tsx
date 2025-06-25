@@ -2,6 +2,7 @@
 import { useBestSellersOptimized } from '@/context/GlobalDataContext';
 import ProductImageHover from '@/components/shared/ProductImageHover';
 import { useRef, useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function BestSellers() {
   const { data: bestSellers, loading, error } = useBestSellersOptimized();
@@ -46,9 +47,9 @@ export default function BestSellers() {
             <h2 className="text-3xl font-bold text-text">Más vendidos de la semana</h2>
             <p className="text-gray-600 mt-2">Los productos favoritos de nuestros clientes</p>
           </div>
-          <a href="#" className="text-primary font-semibold hover:text-pink-600 transition-colors">
+          <Link href="/productos/mas-vendidos" className="text-primary font-semibold hover:text-pink-600 transition-colors">
             Ver todos →
-          </a>
+          </Link>
         </div>
 
         {/* Layout Desktop: Grid 5 columnas */}
@@ -67,64 +68,86 @@ export default function BestSellers() {
             ))
           ) : bestSellers.length > 0 ? (
             bestSellers.map((product: any, index: number) => (
-              <div key={product.id} className="bg-white border border-gray-200 rounded-lg hover:shadow-lg transition-shadow duration-300 overflow-hidden group">
-                <div className="relative">
-                  <ProductImageHover product={product} className="h-48" />
-                  <div className="absolute top-2 left-2 bg-primary text-white text-xs px-2 py-1 rounded-full font-semibold">
-                    #{index + 1} Vendido
-                  </div>
-                  {product.discount && (
-                    <div className="absolute top-2 right-10 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
-                      {product.discount} OFF
+              <Link 
+                key={product.id} 
+                href={`/producto/${product.id}`}
+                className="block"
+              >
+                <div className="bg-white border border-gray-200 rounded-lg hover:shadow-lg transition-shadow duration-300 overflow-hidden group cursor-pointer">
+                  <div className="relative">
+                    <ProductImageHover product={product} className="h-48" />
+                    <div className="absolute top-2 left-2 bg-primary text-white text-xs px-2 py-1 rounded-full font-semibold">
+                      #{index + 1} Vendido
                     </div>
-                  )}
-                  <button className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-primary hover:text-white transition-colors">
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                    </svg>
-                  </button>
-                </div>
-                
-                <div className="p-4 relative">
-                  <h3 className="font-semibold text-text text-sm leading-tight mb-1">
-                    {product.title || product.name}
-                  </h3>
-                  <p className="text-gray-500 text-xs mb-3">
-                    {product.category}
-                  </p>
+                    {product.discount && (
+                      <div className="absolute top-2 right-10 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                        {product.discount} OFF
+                      </div>
+                    )}
+                    <button 
+                      className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-primary hover:text-white transition-colors"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Aquí iría la lógica para agregar a favoritos
+                        console.log('Agregado a favoritos:', product.id);
+                      }}
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                      </svg>
+                    </button>
+                  </div>
                   
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-primary font-bold text-lg">
-                          S/. {(Number(product.price) || 0).toFixed(2)}
-                        </span>
-                        {product.originalPrice && (
-                          <span className="text-gray-400 text-sm line-through">
-                            S/. {(Number(product.originalPrice) || 0).toFixed(2)}
+                  <div className="p-4 relative">
+                    <h3 className="font-semibold text-text text-sm leading-tight mb-1">
+                      {product.title || product.name}
+                    </h3>
+                    <p className="text-gray-500 text-sm mb-3">
+                      {product.category}
+                    </p>
+                    
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-primary font-bold text-lg">
+                            S/. {(Number(product.price) || 0).toFixed(2)}
                           </span>
-                        )}
-                      </div>
-                      <div className="flex items-center mt-1">
-                        <div className="flex text-yellow-400 text-xs">
-                          {'★'.repeat(Math.min(5, Math.round(product.rating || 0)))}
-                          {'☆'.repeat(Math.max(0, 5 - Math.round(product.rating || 0)))}
+                          {product.originalPrice && (
+                            <span className="text-gray-400 text-sm line-through">
+                              S/. {(Number(product.originalPrice) || 0).toFixed(2)}
+                            </span>
+                          )}
                         </div>
-                        <span className="text-gray-500 text-xs ml-1">({product.reviews || 0})</span>
+                        <div className="flex items-center mt-1">
+                          <div className="flex text-yellow-400 text-xs">
+                            {'★'.repeat(Math.min(5, Math.round(product.rating || 0)))}
+                            {'☆'.repeat(Math.max(0, 5 - Math.round(product.rating || 0)))}
+                          </div>
+                          <span className="text-gray-500 text-xs ml-1">({product.reviews || 0})</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  <div className="mt-2 text-xs text-accent font-semibold">
-                    🚚 Envío gratis
-                  </div>
+                    
+                    <div className="mt-2 text-xs text-accent font-semibold">
+                      🚚 Envío gratis
+                    </div>
 
-                  {/* Botón de Agregar en hover - En la sección de textos, parte derecha inferior */}
-                  <button className="absolute bottom-4 right-4 bg-primary text-white px-3 py-1 rounded-lg font-semibold text-xs transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 shadow-lg">
-                    Agregar
-                  </button>
+                    {/* Botón de Agregar en hover - En la sección de textos, parte derecha inferior */}
+                    <button 
+                      className="absolute bottom-4 right-4 bg-primary text-white px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 shadow-lg"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // Aquí iría la lógica para agregar al carrito
+                        console.log('Agregado al carrito:', product.id);
+                      }}
+                    >
+                      Agregar
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))
           ) : (
             // Estado cuando no hay productos
@@ -196,63 +219,85 @@ export default function BestSellers() {
                     <div key={pairIndex} className={`flex-shrink-0 w-72 ${pairIndex === 0 ? 'ml-4' : ''} ${pairIndex === productPairs.length - 1 ? 'mr-4' : ''}`}>
                       <div className="grid grid-cols-2 gap-3">
                         {pair.map((product: any, index: number) => (
-                          <div key={product.id} className="bg-white border border-gray-200 rounded-lg hover:shadow-lg transition-shadow duration-300 overflow-hidden group">
-                            <div className="relative">
-                              <ProductImageHover product={product} className="h-32" />
-                              <div className="absolute top-1 left-1 bg-primary text-white text-xs px-1 py-0.5 rounded-full font-semibold">
-                                #{(pairIndex * 2) + index + 1}
-                              </div>
-                              {product.discount && (
-                                <div className="absolute top-1 right-8 bg-red-500 text-white text-xs px-1 py-0.5 rounded-full font-semibold">
-                                  {product.discount} OFF
+                          <Link 
+                            key={product.id} 
+                            href={`/producto/${product.id}`}
+                            className="block"
+                          >
+                            <div className="bg-white border border-gray-200 rounded-lg hover:shadow-lg transition-shadow duration-300 overflow-hidden group cursor-pointer">
+                              <div className="relative">
+                                <ProductImageHover product={product} className="h-32" />
+                                <div className="absolute top-1 left-1 bg-primary text-white text-xs px-1 py-0.5 rounded-full font-semibold">
+                                  #{(pairIndex * 2) + index + 1}
                                 </div>
-                              )}
-                              <button className="absolute top-1 right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-primary hover:text-white transition-colors">
-                                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                                </svg>
-                              </button>
-                            </div>
-                            
-                            <div className="p-2 relative">
-                              <h3 className="font-semibold text-text text-xs leading-tight mb-1">
-                                {product.title || product.name}
-                              </h3>
-                              <p className="text-gray-500 text-xs mb-2">
-                                {product.category}
-                              </p>
+                                {product.discount && (
+                                  <div className="absolute top-1 right-8 bg-red-500 text-white text-xs px-1 py-0.5 rounded-full font-semibold">
+                                    {product.discount} OFF
+                                  </div>
+                                )}
+                                <button 
+                                  className="absolute top-1 right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-primary hover:text-white transition-colors"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    // Aquí iría la lógica para agregar a favoritos
+                                    console.log('Agregado a favoritos:', product.id);
+                                  }}
+                                >
+                                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                                  </svg>
+                                </button>
+                              </div>
                               
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <div className="flex items-center gap-1">
-                                    <span className="text-primary font-bold text-sm">
-                                      S/. {(Number(product.price) || 0).toFixed(2)}
-                                    </span>
-                                    {product.originalPrice && (
-                                      <span className="text-gray-400 text-xs line-through">
-                                        S/. {(Number(product.originalPrice) || 0).toFixed(2)}
+                              <div className="p-2 relative">
+                                <h3 className="font-semibold text-text text-xs leading-tight mb-1">
+                                  {product.title || product.name}
+                                </h3>
+                                <p className="text-gray-500 text-sm mb-2">
+                                  {product.category}
+                                </p>
+                                
+                                <div className="flex items-center justify-between">
+                                  <div>
+                                    <div className="flex items-center gap-1">
+                                      <span className="text-primary font-bold text-sm">
+                                        S/. {(Number(product.price) || 0).toFixed(2)}
                                       </span>
-                                    )}
-                                  </div>
-                                  <div className="flex items-center mt-1">
-                                    <div className="flex text-yellow-400 text-xs">
-                                      {'★'.repeat(Math.min(5, Math.round(product.rating || 0)))}
+                                      {product.originalPrice && (
+                                        <span className="text-gray-400 text-xs line-through">
+                                          S/. {(Number(product.originalPrice) || 0).toFixed(2)}
+                                        </span>
+                                      )}
                                     </div>
-                                    <span className="text-gray-500 text-xs ml-1">({product.reviews || 0})</span>
+                                    <div className="flex items-center mt-1">
+                                      <div className="flex text-yellow-400 text-xs">
+                                        {'★'.repeat(Math.min(5, Math.round(product.rating || 0)))}
+                                      </div>
+                                      <span className="text-gray-500 text-xs ml-1">({product.reviews || 0})</span>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              
-                              <div className="mt-1 text-xs text-accent font-semibold">
-                                🚚 Envío gratis
-                              </div>
+                                
+                                <div className="mt-1 text-xs text-accent font-semibold">
+                                  🚚 Envío gratis
+                                </div>
 
-                              {/* Botón de Agregar en hover */}
-                              <button className="absolute bottom-2 right-2 bg-primary text-white px-2 py-1 rounded-lg font-semibold text-xs transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-1 group-hover:translate-y-0 shadow-lg">
-                                +
-                              </button>
+                                {/* Botón de Agregar en hover */}
+                                <button 
+                                  className="absolute bottom-2 right-2 bg-primary text-white px-3 py-1.5 rounded-lg font-semibold text-sm transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-1 group-hover:translate-y-0 shadow-lg"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    // Aquí iría la lógica para agregar al carrito
+                                    console.log('Agregado al carrito:', product.id);
+                                  }}
+                                >
+                                  +
+                                </button>
+                              </div>
                             </div>
-                          </div>
+                          </Link>
                         ))}
                         
                         {/* Si el par solo tiene un producto, agregar placeholder */}

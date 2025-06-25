@@ -105,6 +105,44 @@ interface TestimonioDB {
   updated_at: string;
 }
 
+// Interfaz para tamaños
+interface TamañoDB {
+  id: number;
+  nombre: string;
+  slug: string;
+  descripcion: string | null;
+  porciones_aproximadas: number | null;
+  diametro_cm: number | null;
+  peso_gramos: number | null;
+  multiplicador_precio: number;
+  precio_adicional: number;
+  is_disponible: boolean;
+  icono: string | null;
+  color_hex: string | null;
+  orden_display: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// Interfaz para imágenes de producto
+interface ProductoImagenDB {
+  id: number;
+  producto_id: number;
+  url: string;
+  alt_text: string | null;
+  titulo: string | null;
+  orden: number;
+  is_principal: boolean;
+  width: number | null;
+  height: number | null;
+  tamaño_bytes: number | null;
+  formato: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 // Función auxiliar para fetch con manejo de errores
 async function apiRequest<T>(endpoint: string): Promise<APIResponse<T> | null> {
   try {
@@ -201,6 +239,115 @@ export const testimonioService = {
   }
 };
 
+// === SERVICIOS DE TAMAÑOS ===
+export const tamañoService = {
+  // Obtener tamaños disponibles
+  async getDisponibles(): Promise<TamañoDB[]> {
+    const response = await apiRequest<TamañoDB>('/tamaños/disponibles/list');
+    return response?.data || [];
+  },
+
+  // Obtener tamaños para un producto específico
+  async getByProducto(productoId: number): Promise<TamañoDB[]> {
+    const response = await apiRequest<TamañoDB>(`/tamaños/producto/${productoId}`);
+    return response?.data || [];
+  }
+};
+
+// === SERVICIOS DE IMÁGENES ===
+export const imagenService = {
+  // Obtener imágenes de un producto
+  async getByProducto(productoId: number): Promise<ProductoImagenDB[]> {
+    const response = await apiRequest<ProductoImagenDB>(`/producto-imagenes/producto/${productoId}`);
+    return response?.data || [];
+  }
+};
+
+// === SERVICIOS COMPLETOS DE PRODUCTO ===
+export const productoCompletoService = {
+  // Obtener producto con todas sus opciones
+  async getProductoCompleto(productoId: number) {
+    try {
+      const [producto, rellenos, tamaños, imagenes, testimonios] = await Promise.all([
+        productoService.getById(productoId),
+        rellenoService.getByProducto(productoId),
+        tamañoService.getByProducto(productoId),
+        imagenService.getByProducto(productoId),
+        testimonioService.getByProducto(productoId)
+      ]);
+
+      return {
+        producto,
+        rellenos,
+        tamaños,
+        imagenes,
+        testimonios,
+        hasOptions: (rellenos.length > 0 || tamaños.length > 0) && producto?.permite_personalizacion
+      };
+    } catch (error) {
+      console.error('Error obteniendo producto completo:', error);
+      return null;
+    }
+  },
+
+  // Versión optimizada que usa datos del contexto cuando es posible
+  async getProductoCompletoOptimizado(
+    productoId: number, 
+    productoFromCache?: ProductoDB | null,
+    imagenesFromCache?: ProductoImagenDB[]
+  ) {
+    try {
+      // Si tenemos el producto en caché, no lo pedimos de nuevo
+      const productoPromise = productoFromCache 
+        ? Promise.resolve(productoFromCache)
+        : productoService.getById(productoId);
+
+      // Si tenemos imágenes en caché, las filtramos por producto
+      const imagenesPromise = imagenesFromCache
+        ? Promise.resolve(imagenesFromCache.filter(img => img.producto_id === productoId))
+        : imagenService.getByProducto(productoId);
+
+      // Estos siempre los necesitamos de la API
+      const [producto, rellenos, tamaños, imagenes, testimonios] = await Promise.all([
+        productoPromise,
+        rellenoService.getByProducto(productoId),
+        tamañoService.getByProducto(productoId),
+        imagenesPromise,
+        testimonioService.getByProducto(productoId)
+      ]);
+
+      return {
+        producto,
+        rellenos,
+        tamaños,
+        imagenes,
+        testimonios,
+        hasOptions: (rellenos.length > 0 || tamaños.length > 0) && producto?.permite_personalizacion
+      };
+    } catch (error) {
+      console.error('Error obteniendo producto completo optimizado:', error);
+      return null;
+    }
+  },
+
+  // Calcular precio dinámico basado en selecciones
+  calcularPrecio(precioBase: number, tamaño?: TamañoDB, relleno?: RellenoDB): number {
+    let precioFinal = precioBase;
+    
+    // Aplicar multiplicador y precio adicional del tamaño
+    if (tamaño) {
+      precioFinal = (precioBase * tamaño.multiplicador_precio) + tamaño.precio_adicional;
+    }
+    
+    // Agregar precio adicional del relleno
+    if (relleno) {
+      precioFinal += relleno.precio_adicional;
+    }
+    
+    return Math.round(precioFinal * 100) / 100; // Redondear a 2 decimales
+  }
+};
+
 // === FUNCIONES DE TRANSFORMACIÓN ===
 // Convierte datos de la BD al formato que espera el frontend
 export const transformers = {
@@ -252,11 +399,12 @@ export const transformers = {
       name: relleno.nombre,
       description: relleno.descripcion || `${relleno.nombre} premium`,
       image: relleno.imagen_url || `https://images.unsplash.com/photo-${Math.random().toString(36).substr(2, 9)}?w=100&h=100&fit=crop`,
-      price: relleno.precio_adicional,
+      precioAdicional: relleno.precio_adicional,
       isPremium: relleno.is_premium,
       isVegan: relleno.es_vegano,
       containsLactose: relleno.contiene_lactosa,
-      containsGluten: relleno.contiene_gluten
+      containsGluten: relleno.contiene_gluten,
+      color: relleno.color_hex || '#FF6B9D'
     };
   },
 
@@ -272,6 +420,37 @@ export const transformers = {
       isVerified: testimonio.is_verificado,
       productId: testimonio.producto_id,
       date: testimonio.created_at
+    };
+  },
+
+  // Transforma tamaño de BD a formato frontend
+  tamañoToFrontend(tamaño: TamañoDB) {
+    return {
+      id: tamaño.id,
+      name: tamaño.nombre,
+      description: tamaño.descripcion || `${tamaño.nombre} - ${tamaño.porciones_aproximadas || 'N/A'} porciones`,
+      porciones: tamaño.porciones_aproximadas || undefined,
+      diametro: tamaño.diametro_cm || undefined,
+      peso: tamaño.peso_gramos || undefined,
+      multiplicadorPrecio: tamaño.multiplicador_precio,
+      precioAdicional: tamaño.precio_adicional,
+      icono: tamaño.icono || undefined,
+      color: tamaño.color_hex || '#FF6B9D',
+      orden: tamaño.orden_display
+    };
+  },
+
+  // Transforma imagen de BD a formato frontend
+  imagenToFrontend(imagen: ProductoImagenDB) {
+    return {
+      id: imagen.id,
+      url: imagen.url,
+      alt: imagen.alt_text || 'Imagen del producto',
+      title: imagen.titulo || '',
+      orden: imagen.orden,
+      isPrincipal: imagen.is_principal,
+      width: imagen.width || undefined,
+      height: imagen.height || undefined
     };
   }
 };

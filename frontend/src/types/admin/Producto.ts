@@ -21,6 +21,7 @@ export interface Producto {
   is_active: boolean
   is_disponible: boolean
   is_featured: boolean
+  permite_personalizacion: boolean
   requiere_refrigeracion: boolean
   apto_veganos: boolean
   contiene_gluten: boolean
@@ -52,12 +53,16 @@ export interface ProductoForm {
   is_active: boolean
   is_disponible: boolean
   is_featured: boolean
+  permite_personalizacion?: boolean
   requiere_refrigeracion: boolean
   apto_veganos: boolean
   contiene_gluten: boolean
   contiene_lactosa: boolean
   meta_title?: string
   meta_description?: string
+  // Relaciones many-to-many
+  rellenos_ids?: number[]
+  tamaños_ids?: number[]
 }
 
 export interface ProductoFilters {

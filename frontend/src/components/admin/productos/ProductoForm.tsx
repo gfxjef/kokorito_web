@@ -53,6 +53,7 @@ export default function ProductoForm({ producto, isEdit = false }: ProductoFormP
     is_active: producto?.is_active ?? true,
     is_disponible: producto?.is_disponible ?? true,
     is_featured: producto?.is_featured ?? false,
+    permite_personalizacion: producto?.permite_personalizacion ?? false,
     requiere_refrigeracion: producto?.requiere_refrigeracion ?? false,
     apto_veganos: producto?.apto_veganos ?? false,
     contiene_gluten: producto?.contiene_gluten ?? false,
@@ -138,11 +139,17 @@ export default function ProductoForm({ producto, isEdit = false }: ProductoFormP
     setError(null)
 
     try {
+      // Habilitar personalización automáticamente si hay rellenos o tamaños
+      const tieneOpciones = rellenosSeleccionados.length > 0 || tamañosSeleccionados.length > 0
+      
       const dataToSend = {
         ...formData,
+        permite_personalizacion: tieneOpciones || (formData.permite_personalizacion ?? false),
         rellenos_ids: rellenosSeleccionados,
         tamaños_ids: tamañosSeleccionados
       }
+
+      console.log('📦 Enviando datos al backend:', dataToSend)
 
       if (isEdit && producto) {
         await productoService.update(producto.id, dataToSend)
@@ -570,6 +577,12 @@ export default function ProductoForm({ producto, isEdit = false }: ProductoFormP
                 enabled={formData.is_featured}
                 onChange={(value) => handleInputChange('is_featured', value)}
                 label="Producto Destacado"
+              />
+              
+              <Toggle
+                enabled={formData.permite_personalizacion ?? false}
+                onChange={(value) => handleInputChange('permite_personalizacion', value)}
+                label="Permite Personalización 🎨"
               />
               
               <Toggle

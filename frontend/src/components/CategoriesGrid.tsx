@@ -2,6 +2,7 @@
 import { useCategoriesWithProductsOptimized } from '@/context/GlobalDataContext';
 import ProductImageHover from '@/components/shared/ProductImageHover';
 import { useRef, useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function CategoriesGrid() {
   const { data: categories, loading, error } = useCategoriesWithProductsOptimized();
@@ -141,7 +142,11 @@ function CategorySection({ category, categoryIndex, lineColors, textColors, grad
         {/* Productos (primeros 4) */}
         {category.products.length > 0 ? (
           category.products.slice(0, 4).map((product: any) => (
-            <div key={product.id} className="group cursor-pointer">
+            <Link 
+              key={product.id}
+              href={`/producto/${product.id}`}
+              className="block group cursor-pointer"
+            >
               <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full">
                 {/* Imagen del producto */}
                 <div className="relative">
@@ -151,7 +156,15 @@ function CategorySection({ category, categoryIndex, lineColors, textColors, grad
                       {product.discount} OFF
                     </div>
                   )}
-                  <button className="absolute top-2 right-2 bg-white p-1 rounded-full shadow hover:bg-gray-100 transition-colors">
+                  <button 
+                    className="absolute top-2 right-2 bg-white p-1 rounded-full shadow hover:bg-gray-100 transition-colors"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      // Aquí iría la lógica para agregar a favoritos
+                      console.log('Agregado a favoritos:', product.id);
+                    }}
+                  >
                     <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
@@ -196,15 +209,21 @@ function CategorySection({ category, categoryIndex, lineColors, textColors, grad
 
                   {/* Botón de Agregar en hover - En la sección de textos, parte derecha inferior */}
                   <button 
-                    className={`absolute bottom-3 right-3 px-3 py-1 rounded-lg font-semibold text-xs text-white transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 shadow-lg ${
+                    className={`absolute bottom-3 right-3 px-4 py-2 rounded-lg font-semibold text-sm text-white transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 shadow-lg ${
                       lineColors[categoryIndex % lineColors.length]
                     }`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      // Aquí iría la lógica para agregar al carrito
+                      console.log('Agregado al carrito:', product.id);
+                    }}
                   >
                     Agregar
                   </button>
                 </div>
               </div>
-            </div>
+            </Link>
           ))
         ) : (
           // Placeholders si no hay suficientes productos
@@ -216,27 +235,29 @@ function CategorySection({ category, categoryIndex, lineColors, textColors, grad
         )}
 
         {/* Cuadro promocional (mismo tamaño que las tarjetas) */}
-        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full">
-          <div className="relative h-full flex flex-col justify-center items-center text-white">
-            {/* Imagen de fondo */}
-            <div 
-              className="absolute inset-0 bg-cover bg-center"
-              style={{
-                backgroundImage: `url(${category.image})`
-              }}
-            ></div>
-            
-            {/* Degradado overlay con color de línea (30% opacidad) */}
-            <div className={`absolute inset-0 bg-gradient-to-br ${gradientColors[categoryIndex % gradientColors.length]}`}></div>
-            
-            {/* Contenido centrado */}
-            <div className="relative z-10 text-center p-4">
-              <button className="bg-white text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg text-sm">
-                Ver todos
-              </button>
+        <Link href={`/categoria/${category.slug || category.id}`} className="block">
+          <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full cursor-pointer">
+            <div className="relative h-full flex flex-col justify-center items-center text-white">
+              {/* Imagen de fondo */}
+              <div 
+                className="absolute inset-0 bg-cover bg-center"
+                style={{
+                  backgroundImage: `url(${category.image})`
+                }}
+              ></div>
+              
+              {/* Degradado overlay con color de línea (30% opacidad) */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${gradientColors[categoryIndex % gradientColors.length]}`}></div>
+              
+              {/* Contenido centrado */}
+              <div className="relative z-10 text-center p-4">
+                <button className="bg-white text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg text-sm">
+                  Ver todos
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Layout Mobile: Scroll horizontal con 2 productos por fila y flechas */}
@@ -286,7 +307,11 @@ function CategorySection({ category, categoryIndex, lineColors, textColors, grad
                       <div key={pairIndex} className={`flex-shrink-0 w-72 ${pairIndex === 0 ? 'ml-4' : ''}`}>
                         <div className="grid grid-cols-2 gap-3">
                           {pair.map((product: any) => (
-                            <div key={product.id} className="group cursor-pointer">
+                            <Link 
+                              key={product.id}
+                              href={`/producto/${product.id}`}
+                              className="block group cursor-pointer"
+                            >
                               <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full">
                                 {/* Imagen del producto */}
                                 <div className="relative">
@@ -296,7 +321,15 @@ function CategorySection({ category, categoryIndex, lineColors, textColors, grad
                                       {product.discount} OFF
                                     </div>
                                   )}
-                                  <button className="absolute top-1 right-1 bg-white p-1 rounded-full shadow hover:bg-gray-100 transition-colors">
+                                  <button 
+                                    className="absolute top-1 right-1 bg-white p-1 rounded-full shadow hover:bg-gray-100 transition-colors"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      // Aquí iría la lógica para agregar a favoritos
+                                      console.log('Agregado a favoritos:', product.id);
+                                    }}
+                                  >
                                     <svg className="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                     </svg>
@@ -340,15 +373,21 @@ function CategorySection({ category, categoryIndex, lineColors, textColors, grad
 
                                   {/* Botón de Agregar en hover */}
                                   <button 
-                                    className={`absolute bottom-2 right-2 px-2 py-1 rounded-lg font-semibold text-xs text-white transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-1 group-hover:translate-y-0 shadow-lg ${
+                                    className={`absolute bottom-2 right-2 px-3 py-1.5 rounded-lg font-semibold text-sm text-white transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-1 group-hover:translate-y-0 shadow-lg ${
                                       lineColors[categoryIndex % lineColors.length]
                                     }`}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      // Aquí iría la lógica para agregar al carrito
+                                      console.log('Agregado al carrito:', product.id);
+                                    }}
                                   >
                                     +
                                   </button>
                                 </div>
                               </div>
-                            </div>
+                            </Link>
                           ))}
                           
                           {/* Si el par solo tiene un producto, agregar placeholder */}
@@ -364,27 +403,29 @@ function CategorySection({ category, categoryIndex, lineColors, textColors, grad
                     {/* Cuadro promocional "Ver todos" - Solo mostrar si hay productos */}
                     {category.products.length > 0 && (
                       <div className="flex-shrink-0 w-36 mr-4">
-                        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 h-64">
-                          <div className="relative h-full flex flex-col justify-center items-center text-white">
-                            {/* Imagen de fondo */}
-                            <div 
-                              className="absolute inset-0 bg-cover bg-center"
-                              style={{
-                                backgroundImage: `url(${category.image})`
-                              }}
-                            ></div>
-                            
-                            {/* Degradado overlay con color de línea (30% opacidad) */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${gradientColors[categoryIndex % gradientColors.length]}`}></div>
-                            
-                            {/* Contenido centrado */}
-                            <div className="relative z-10 text-center p-4">
-                              <button className="bg-white text-gray-900 px-3 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg text-xs">
-                                Ver todos
-                              </button>
+                        <Link href={`/categoria/${category.slug || category.id}`}>
+                          <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 h-64 cursor-pointer">
+                            <div className="relative h-full flex flex-col justify-center items-center text-white">
+                              {/* Imagen de fondo */}
+                              <div 
+                                className="absolute inset-0 bg-cover bg-center"
+                                style={{
+                                  backgroundImage: `url(${category.image})`
+                                }}
+                              ></div>
+                              
+                              {/* Degradado overlay con color de línea (30% opacidad) */}
+                              <div className={`absolute inset-0 bg-gradient-to-br ${gradientColors[categoryIndex % gradientColors.length]}`}></div>
+                              
+                              {/* Contenido centrado */}
+                              <div className="relative z-10 text-center p-4">
+                                <button className="bg-white text-gray-900 px-3 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg text-xs">
+                                  Ver todos
+                                </button>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        </Link>
                       </div>
                     )}
                   </>

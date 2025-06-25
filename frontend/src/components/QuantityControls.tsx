@@ -19,9 +19,15 @@ export default function QuantityControls({
 }: QuantityControlsProps) {
   const [quantity, setQuantity] = useState(initialQuantity);
 
+  // Actualizar quantity cuando cambie initialQuantity
+  useEffect(() => {
+    setQuantity(initialQuantity);
+  }, [initialQuantity]);
+
+  // Solo llamar onQuantityChange cuando quantity cambie (no en montaje inicial)
   useEffect(() => {
     onQuantityChange?.(quantity);
-  }, [quantity, onQuantityChange]);
+  }, [quantity]); // Removido onQuantityChange de dependencias para evitar bucle infinito
 
   const handleDecrease = () => {
     if (quantity > minQuantity && !disabled) {

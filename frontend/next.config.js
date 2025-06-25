@@ -12,7 +12,13 @@ console.log('✅ API_URL configurada:', API_URL)
 
 const nextConfig = {
   images: {
-    domains: ['images.unsplash.com', 'via.placeholder.com', 'picsum.photos'],
+    domains: [
+      'images.unsplash.com', 
+      'via.placeholder.com', 
+      'picsum.photos',
+      'i.ibb.co',  // Dominio para imágenes de productos
+      'lanuezpasteleria.com'  // Dominio para imágenes de La Nuez Pastelería
+    ],
   },
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,

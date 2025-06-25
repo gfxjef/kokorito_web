@@ -240,6 +240,9 @@ class ProductoUpdate(BaseModel):
     meta_title: Optional[str] = None
     meta_description: Optional[str] = None
     is_active: Optional[bool] = None
+    # Relaciones opcionales
+    rellenos_ids: Optional[list[int]] = None
+    tamaños_ids: Optional[list[int]] = None
 
 # Modelos para Rellenos
 class RellenoCreate(BaseModel):

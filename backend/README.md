@@ -35,16 +35,47 @@ python test_api.py
 
 ## 🗄️ Estructura de Base de Datos
 
-| Tabla | Filas | Columnas | Descripción |
-|-------|-------|----------|-------------|
-| **categoria** | 5 | 14 | Categorías de productos |
-| **producto** | 6 | 27 | Productos del catálogo |
-| **producto_imagen** | 0 | 14 | Imágenes de productos |
-| **producto_relleno** | 20 | 2 | Relación productos-rellenos |
-| **producto_tamaño** | 14 | 2 | Relación productos-tamaños |
-| **relleno** | 5 | 19 | Rellenos disponibles |
-| **tamaño** | 5 | 16 | Tamaños disponibles |
-| **testimonio** | 5 | 20 | Testimonios de clientes |
+> 📋 **Documentación Completa:** Ver [DATABASE_SCHEMA.md](DATABASE_SCHEMA.md) para análisis detallado de relaciones, diagramas ER y consultas optimizadas.
+
+| Tabla | Filas | Columnas | Descripción | Relaciones |
+|-------|-------|----------|-------------|------------|
+| **categoria** | 5 | 14 | Categorías de productos | ↩️ Auto-relación (jerarquía) |
+| **producto** | 6 | 27 | Productos del catálogo | ➡️ FK a categoria |
+| **producto_imagen** | 0 | 14 | Imágenes de productos | ➡️ FK a producto |
+| **producto_relleno** | 20 | 2 | 🔗 **Relación M:N** productos-rellenos | Many-to-Many |
+| **producto_tamaño** | 14 | 2 | 🔗 **Relación M:N** productos-tamaños | Many-to-Many |
+| **relleno** | 5 | 19 | Rellenos/sabores disponibles | ⬅️ Conecta vía M:N |
+| **tamaño** | 5 | 16 | Tamaños disponibles | ⬅️ Conecta vía M:N |
+| **testimonio** | 5 | 20 | Testimonios de clientes | ➡️ FK a producto |
+
+### 🔗 **Cómo se Conectan las Tablas:**
+
+#### **Productos ↔ Rellenos (Sabores)**
+```sql
+-- Un producto puede tener múltiples rellenos
+-- Un relleno puede estar en múltiples productos
+SELECT r.nombre as relleno, r.precio_adicional 
+FROM relleno r
+INNER JOIN producto_relleno pr ON r.id = pr.relleno_id
+WHERE pr.producto_id = 1 AND r.is_disponible = 1;
+```
+
+#### **Productos ↔ Tamaños**
+```sql
+-- Un producto puede tener múltiples tamaños
+-- Un tamaño puede aplicar a múltiples productos  
+SELECT t.nombre as tamaño, t.multiplicador_precio, t.precio_adicional
+FROM tamaño t
+INNER JOIN producto_tamaño pt ON t.id = pt.tamaño_id  
+WHERE pt.producto_id = 1 AND t.is_disponible = 1;
+```
+
+#### **💰 Cálculo de Precio Final:**
+```javascript
+precio_final = (producto.precio_base * tamaño.multiplicador_precio) 
+               + tamaño.precio_adicional 
+               + relleno.precio_adicional
+```
 
 ## 🔗 Endpoints Disponibles
 
